@@ -1,2 +1,2 @@
 # creasylai19.github.io
-这个项目主要是提供一个可以直接复用的Android前端框架，可以快速应用在具体项目开发中
+About framework used in Android project
