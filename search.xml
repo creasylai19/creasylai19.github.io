@@ -39,29 +39,29 @@
 <p>以Arthas官网的Demo为例：</p>
 <p>下载Arthas：<a href="https://github.com/alibaba/arthas/releases">https://github.com/alibaba/arthas/releases</a></p>
 <p>运行Demo程序，<code>java -jar math-game.jar</code>。这是一个每隔一秒通过Random获取随机数，然后做质因数分解，并打印出分解结果的小程序</p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/01.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/01.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png"></p>
 <p>运行Arthas，<code>java -jar arthas-boot.jar</code></p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/02.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/02.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/02.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/02.png"></p>
 <p>运行后，arthas会打印出当前所有的Java进程，根据中括号中的ID选择要处理的进程。如，输入1，然后按ENTER</p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/03.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/03.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/03.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/03.png"></p>
 <p>这时候，arthas已经attach上前面运行的math-game程序。main_class也显示了该程序的主类</p>
 <p>我们以这个demo.MathGame为例，反编译它<code>jad demo.MathGame</code></p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/04.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/04.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/04.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/04.png"></p>
 <p>如上图，可见反编译后的main函数为一个死循环，每隔一秒运行一次run函数。</p>
 <p>我们把反编译后的代码存到本地<code>jad demo.MathGame --source-only --lineNumber false &gt; MathGame.java</code>，这样，在运行arthas的目录下就生成了MathGame.java文件。</p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/05.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/05.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/05.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/05.png"></p>
 <p>我们编辑它，在它run函数中加一个打印语句<code>System.out.println(&quot;动态加的代码，打印number值为：&quot; + number)</code></p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/06.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/06.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/06.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/06.png"></p>
 <p>加了代码后，我们可以自己用javac工具编译，也可以用arthas提供mc(Memory Compiler/内存编译器)工具编译</p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/07.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/07.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/07.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/07.png"></p>
 <p>如上，编译得到MathGame.class字节码文件，下面则是通过arthas的redefine命令发布到JVM中</p>
 <p>发布前，我们再次确认，当前MathGame运行的结果是</p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/08.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/08.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/08.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/08.png"></p>
 <p>没有执行我们加入的代码<code>System.out.println(&quot;动态加的代码，打印number值为：&quot; + number)</code></p>
 <p>执行<code>redefine /Users/creasylai/program/arthas-bin/demo/MathGame.class</code></p>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/09.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/09.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/09.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/09.png"></p>
 <p>再观察MathGame运行的结果 </p>
-<p><img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/10.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/10.png"></p>
+<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/10.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/10.png"></p>
 <p>这时候，我们加入的代码就已经执行了。</p>
 <hr>
 <p>其他：</p>
@@ -70,7 +70,7 @@
 <p>执行命令<code>watch demo.MathGame primeFactors &quot;&#123;params,returnObj&#125;&quot; -x 2&quot;</code></p>
 </li>
 </ol>
-<p> <img src="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/11.png" alt="https://raw.githubusercontent.com/creasylai19/creasylai19.blog.images/main/20210906/article1/11.png"></p>
+<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/11.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/11.png"></p>
 <p>如上图，入参和返回值都打印出来了(返回值为null是因为p rimeFactors方法抛出异常了)</p>
 <ol start="2">
 <li>arthas还有很多有用的命令，如trace可以追踪每个函数的执行耗时，dashboard可以查看程序的运行状态等</li>
