@@ -1044,6 +1044,36 @@ pre code {
 .tabs-comment .tab-content .tab-pane:not(.active) {
   display: none;
 }
+.blockquote-center-cus {
+  border-left: 0;
+  margin: 40px 0;
+  padding: 0;
+  position: relative;
+}
+.blockquote-center-cus::before,
+.blockquote-center-cus::after {
+  left: 0;
+  line-height: 1;
+  opacity: 0.6;
+  position: absolute;
+  width: 100%;
+}
+.blockquote-center-cus::before {
+  border-top: 1px solid #ccc;
+  text-align: left;
+  top: -20px;
+  content: '\f10d';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+.blockquote-center-cus::after {
+  border-bottom: 1px solid #ccc;
+  bottom: -20px;
+  text-align: right;
+  content: '\f10e';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
 .pagination .prev,
 .pagination .next,
 .pagination .page-number,
