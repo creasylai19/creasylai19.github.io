@@ -23,43 +23,32 @@
   <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"lilongsheng.tech","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="你独处的能力，决定了你的人生高度你定位BUG的能力，决定了你的薪资高度-收录于《胡说八道全集》        平常编码工作中，我们会常遇到如下场景：本地运行没问题，但测试环境就是运行异常，棘手的是，看日志一切都是正常的。 遇到这种情况，常见的做法是到测试环境把class文件拉回本地反编译，比对测试环境代码是否部署有问题。 如果代码没问题，则添加打印参数的日志，再重新部署，再复现。这种方法可以解决">
+<meta name="description" content="题目请你判断一个 9 x 9 的数独是否有效。只需要 根据以下规则 ，验证已经填入的数字是否有效即可。  数字 1-9 在每一行只能出现一次。 数字 1-9 在每一列只能出现一次。 数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="十分钟学习一个日常定位bug技巧之Arthas工具">
-<meta property="og:url" content="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:title" content="LeetCode36-有效的数独">
+<meta property="og:url" content="https://lilongsheng.tech/2021/11/23/LeetCode36/index.html">
 <meta property="og:site_name" content="creasylai19">
-<meta property="og:description" content="你独处的能力，决定了你的人生高度你定位BUG的能力，决定了你的薪资高度-收录于《胡说八道全集》        平常编码工作中，我们会常遇到如下场景：本地运行没问题，但测试环境就是运行异常，棘手的是，看日志一切都是正常的。 遇到这种情况，常见的做法是到测试环境把class文件拉回本地反编译，比对测试环境代码是否部署有问题。 如果代码没问题，则添加打印参数的日志，再重新部署，再复现。这种方法可以解决">
+<meta property="og:description" content="题目请你判断一个 9 x 9 的数独是否有效。只需要 根据以下规则 ，验证已经填入的数字是否有效即可。  数字 1-9 在每一行只能出现一次。 数字 1-9 在每一列只能出现一次。 数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/02.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/03.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/04.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/05.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/06.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/07.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/08.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/09.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/10.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/11.png">
-<meta property="article:published_time" content="2021-09-06T15:20:30.000Z">
-<meta property="article:modified_time" content="2021-09-10T17:19:12.188Z">
+<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article1/01.png">
+<meta property="article:published_time" content="2021-11-23T15:56:18.000Z">
+<meta property="article:modified_time" content="2021-11-23T16:46:04.154Z">
 <meta property="article:author" content="creasylai19">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="算法">
 <meta property="article:tag" content="Java">
-<meta property="article:tag" content="Bug">
-<meta property="article:tag" content="Arthas">
-<meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png">
+<meta name="twitter:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article1/01.png">
 
 
-<link rel="canonical" href="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/">
+<link rel="canonical" href="https://lilongsheng.tech/2021/11/23/LeetCode36/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/","path":"2021/09/06/十分钟学习一个日常定位bug技巧之Arthas工具/","title":"十分钟学习一个日常定位bug技巧之Arthas工具"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lilongsheng.tech/2021/11/23/LeetCode36/","path":"2021/11/23/LeetCode36/","title":"LeetCode36-有效的数独"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>十分钟学习一个日常定位bug技巧之Arthas工具 | creasylai19</title>
+<title>LeetCode36-有效的数独 | creasylai19</title>
   
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -155,7 +144,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -168,6 +157,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">2.</span> <span class="nav-text">解答</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -246,7 +236,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/">
+    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2021/11/23/LeetCode36/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://img2.doubanio.com/icon/ul106293348-12.jpg">
@@ -259,7 +249,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          十分钟学习一个日常定位bug技巧之Arthas工具
+          LeetCode36-有效的数独
         </h1>
 
         <div class="post-meta-container">
@@ -270,14 +260,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-09-06 23:20:30" itemprop="dateCreated datePublished" datetime="2021-09-06T23:20:30+08:00">2021-09-06</time>
+      <time title="创建时间：2021-11-23 23:56:18" itemprop="dateCreated datePublished" datetime="2021-11-23T23:56:18+08:00">2021-11-23</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-09-11 01:19:12" itemprop="dateModified" datetime="2021-09-11T01:19:12+08:00">2021-09-11</time>
+        <time title="修改时间：2021-11-24 00:46:04" itemprop="dateModified" datetime="2021-11-24T00:46:04+08:00">2021-11-24</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -285,7 +275,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
         </span>
     </span>
 
@@ -303,14 +293,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.7k</span>
+      <span>3.7k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -321,67 +311,40 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <blockquote class="blockquote-center-cus">
-<div style="text-align:center;">你独处的能力，决定了你的人生高度</div><div style="text-align:center">你定位BUG的能力，决定了你的薪资高度</div><div style="text-align:right;padding-right:20px;">-收录于《胡说八道全集》    </div>
-</blockquote>
-
-
-<p>平常编码工作中，我们会常遇到如下场景：本地运行没问题，但测试环境就是运行异常，棘手的是，看日志一切都是正常的。</p>
-<p>遇到这种情况，常见的做法是到测试环境把class文件拉回本地反编译，比对测试环境代码是否部署有问题。</p>
-<p>如果代码没问题，则添加打印参数的日志，再重新部署，再复现。这种方法可以解决问题，但一系列的操作，还是太费时间。</p>
-<p>这里介绍一个工具<code>Arthas</code>，它可以直接在运行中的服务把JVM中的class字节码反编译，修改反编译后的代码，再直接重新发布到JVM中，整个过程，不用重启服务。</p>
+        <h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>请你判断一个 <code>9 x 9</code> 的数独是否有效。只需要 <strong>根据以下规则</strong> ，验证已经填入的数字是否有效即可。</p>
+<ol>
+<li>数字 <code>1-9</code> 在每一行只能出现一次。</li>
+<li>数字 <code>1-9</code> 在每一列只能出现一次。</li>
+<li>数字 <code>1-9</code> 在每一个以粗实线分隔的 <code>3x3</code> 宫内只能出现一次。（请参考示例图）</li>
+</ol>
 <span id="more"></span>
 
-<p>下面介绍整个过程，目录如下：</p>
-<ol>
-<li>运行Arthas</li>
-<li>反编译class字节码</li>
-<li>修改代码</li>
-<li>发布到JVM</li>
-</ol>
-<p>以Arthas官网的Demo为例：</p>
-<p>下载Arthas：<a target="_blank" rel="noopener" href="https://github.com/alibaba/arthas/releases">https://github.com/alibaba/arthas/releases</a></p>
-<p>运行Demo程序，<code>java -jar math-game.jar</code>。这是一个每隔一秒通过Random获取随机数，然后做质因数分解，并打印出分解结果的小程序</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png"></p>
-<p>运行Arthas，<code>java -jar arthas-boot.jar</code></p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/02.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/02.png"></p>
-<p>运行后，arthas会打印出当前所有的Java进程，根据中括号中的ID选择要处理的进程。如，输入1，然后按ENTER</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/03.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/03.png"></p>
-<p>这时候，arthas已经attach上前面运行的math-game程序。main_class也显示了该程序的主类</p>
-<p>我们以这个demo.MathGame为例，反编译它<code>jad demo.MathGame</code></p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/04.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/04.png"></p>
-<p>如上图，可见反编译后的main函数为一个死循环，每隔一秒运行一次run函数。</p>
-<p>我们把反编译后的代码存到本地<code>jad demo.MathGame --source-only --lineNumber false &gt; MathGame.java</code>，这样，在运行arthas的目录下就生成了MathGame.java文件。</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/05.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/05.png"></p>
-<p>我们编辑它，在它run函数中加一个打印语句<code>System.out.println(&quot;动态加的代码，打印number值为：&quot; + number)</code></p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/06.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/06.png"></p>
-<p>加了代码后，我们可以自己用javac工具编译，也可以用arthas提供mc(Memory Compiler/内存编译器)工具编译</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/07.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/07.png"></p>
-<p>如上，编译得到MathGame.class字节码文件，下面则是通过arthas的redefine命令发布到JVM中</p>
-<p>发布前，我们再次确认，当前MathGame运行的结果是</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/08.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/08.png"></p>
-<p>没有执行我们加入的代码<code>System.out.println(&quot;动态加的代码，打印number值为：&quot; + number)</code></p>
-<p>执行<code>redefine /Users/creasylai/program/arthas-bin/demo/MathGame.class</code></p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/09.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/09.png"></p>
-<p>再观察MathGame运行的结果 </p>
-<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/10.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/10.png"></p>
-<p>这时候，我们加入的代码就已经执行了。</p>
-<hr>
-<p>其他：</p>
-<ol>
-<li><p>其实arthas提供了watch命令，可以直接观察方法执行的入参、返回值等，在上方的场景，我们没必要加打印语句了</p>
-<p>执行命令<code>watch demo.MathGame primeFactors &quot;&#123;params,returnObj&#125;&quot; -x 2&quot;</code></p>
-</li>
-</ol>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/11.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/11.png"></p>
-<p>如上图，入参和返回值都打印出来了(返回值为null是因为p rimeFactors方法抛出异常了)</p>
-<ol start="2">
-<li>arthas还有很多有用的命令，如trace可以追踪每个函数的执行耗时，dashboard可以查看程序的运行状态等</li>
-</ol>
-<p>下方链接为arthas在线教程</p>
-<p>基础教程【十分钟】<a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&amp;id=arthas-basics">https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&amp;id=arthas-basics</a></p>
-<p>进阶教程【十分钟】<a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&amp;id=arthas-advanced">https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&amp;id=arthas-advanced</a></p>
-<p>参考文档：<a target="_blank" rel="noopener" href="https://arthas.aliyun.com/zh-cn/">https://arthas.aliyun.com/zh-cn/</a></p>
+
+<p><strong>注意：</strong></p>
+<ul>
+<li>一个有效的数独（部分已被填充）不一定是可解的。</li>
+<li>只需要根据以上规则，验证已经填入的数字是否有效即可。</li>
+<li>空白格用 <code>&#39;.&#39;</code> 表示。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article1/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article1/01.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">输入：board = </span><br><span class="line">[[&quot;5&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;,&quot;9&quot;,&quot;5&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;9&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;3&quot;]</span><br><span class="line">,[&quot;4&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;]</span><br><span class="line">,[&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;8&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;4&quot;,&quot;1&quot;,&quot;9&quot;,&quot;.&quot;,&quot;.&quot;,&quot;5&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;9&quot;]]</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">输入：board = </span><br><span class="line">[[&quot;8&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;,&quot;9&quot;,&quot;5&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;9&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;3&quot;]</span><br><span class="line">,[&quot;4&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;]</span><br><span class="line">,[&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;8&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;4&quot;,&quot;1&quot;,&quot;9&quot;,&quot;.&quot;,&quot;.&quot;,&quot;5&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;9&quot;]]</span><br><span class="line">输出：false</span><br><span class="line">解释：除了第一行的第一个数字从 5 改为 8 以外，空格内其他数字均与 示例1 相同。 但由于位于左上角的 3x3 宫内有两个 8 存在, 因此这个数独是无效的。</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>board.length == 9</code></li>
+<li><code>board[i].length == 9</code></li>
+<li><code>board[i][j]</code> 是一位数字（<code>1-9</code>）或者 <code>&#39;.&#39;</code></li>
+</ul>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看题目可知，有效的数独是指每行/每列/每个3*3的方格，均无重复元素出现。所以，答题也按这个思路去做即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isValidSudoku</span><span class="params">(<span class="keyword">char</span>[][] board)</span> </span>&#123;</span><br><span class="line">        Map&lt;Character, Boolean&gt;[][] maps = <span class="keyword">new</span> HashMap[<span class="number">3</span>][<span class="number">3</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; board.length; i++) &#123;</span><br><span class="line">            Map&lt;Character, Boolean&gt; rowMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            Map&lt;Character, Boolean&gt; columnMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; board[i].length; j++) &#123;</span><br><span class="line">                <span class="comment">//检测行</span></span><br><span class="line">                <span class="keyword">if</span>(board[i][j] != <span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                    Boolean exists = rowMap.put(board[i][j], <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">if</span>(<span class="keyword">null</span> != exists) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//检测列</span></span><br><span class="line">                <span class="keyword">if</span>(board[j][i] != <span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                    Boolean exists = columnMap.put(board[j][i], <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">if</span>(<span class="keyword">null</span> != exists) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//检测矩阵</span></span><br><span class="line">                <span class="keyword">if</span>(board[i][j] != <span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>( <span class="keyword">null</span> == maps[i/<span class="number">3</span>][j/<span class="number">3</span>] )&#123;</span><br><span class="line">                        maps[i/<span class="number">3</span>][j/<span class="number">3</span>] = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">                    &#125;</span><br><span class="line">                    Boolean exists = maps[i/<span class="number">3</span>][j/<span class="number">3</span>].put(board[i][j], <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">if</span>(<span class="keyword">null</span> != exists) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            rowMap.clear();</span><br><span class="line">            columnMap.clear();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>题目转载自：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-sudoku">https://leetcode-cn.com/problems/valid-sudoku</a></p>
 
     </div>
 
@@ -392,7 +355,7 @@
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2021/11/23/LeetCode36/" rel="bookmark">LeetCode36-有效的数独</a></div>
+      <div class="popular-posts-title"><a href="/2021/09/06/十分钟学习一个日常定位bug技巧之Arthas工具/" rel="bookmark">十分钟学习一个日常定位bug技巧之Arthas工具</a></div>
     </li>
   </ul>
 
@@ -413,7 +376,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/" title="十分钟学习一个日常定位bug技巧之Arthas工具">https://lilongsheng.tech/2021/09/06/十分钟学习一个日常定位bug技巧之Arthas工具/</a>
+      <a href="https://lilongsheng.tech/2021/11/23/LeetCode36/" title="LeetCode36-有效的数独">https://lilongsheng.tech/2021/11/23/LeetCode36/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -422,24 +385,20 @@
 </div>
 
           <div class="post-tags">
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
               <a href="/tags/Java/" rel="tag"># Java</a>
-              <a href="/tags/Bug/" rel="tag"># Bug</a>
-              <a href="/tags/Arthas/" rel="tag"># Arthas</a>
-              <a href="/tags/JVM/" rel="tag"># JVM</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/09/06/hello-world/" rel="prev" title="Hello World">
-                  <i class="fa fa-chevron-left"></i> Hello World
+                <a href="/2021/09/14/%E5%8F%AF%E8%BD%AC%E5%80%BA/" rel="prev" title="可转债">
+                  <i class="fa fa-chevron-left"></i> 可转债
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/09/10/Gitee%E5%AE%9E%E7%8E%B0%E5%9B%BE%E5%BA%8A/" rel="next" title="Gitee实现图床">
-                  Gitee实现图床 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

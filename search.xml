@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2021/09/06/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>Gitee实现图床</title>
     <url>/2021/09/10/Gitee%E5%AE%9E%E7%8E%B0%E5%9B%BE%E5%BA%8A/</url>
     <content><![CDATA[<blockquote class="blockquote-center">
@@ -76,50 +56,71 @@
       </tags>
   </entry>
   <entry>
-    <title>可转债</title>
-    <url>/2021/09/14/%E5%8F%AF%E8%BD%AC%E5%80%BA/</url>
-    <content><![CDATA[<p>本篇为可转债的入门文章，主要以<a href="https://xueqiu.com/S/SH113050">南银转债(SH:113050)</a>为例，介绍可转债的相关概念。</p>
+    <title>LeetCode36-有效的数独</title>
+    <url>/2021/11/23/LeetCode36/</url>
+    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>请你判断一个 <code>9 x 9</code> 的数独是否有效。只需要 <strong>根据以下规则</strong> ，验证已经填入的数字是否有效即可。</p>
+<ol>
+<li>数字 <code>1-9</code> 在每一行只能出现一次。</li>
+<li>数字 <code>1-9</code> 在每一列只能出现一次。</li>
+<li>数字 <code>1-9</code> 在每一个以粗实线分隔的 <code>3x3</code> 宫内只能出现一次。（请参考示例图）</li>
+</ol>
 <span id="more"></span>
 
-<p>首先附上南银转债相关的发行公告(资料来源：<a href="http://www.sse.com.cn/disclosure/listedinfo/announcement/">上海证券交易所</a>)</p>
+
+<p><strong>注意：</strong></p>
 <ul>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210610_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8B%9F%E9%9B%86%E8%AF%B4%E6%98%8E%E4%B9%A6.pdf">20210610_南京银行股份有限公司公开发行A股可转换公司债券募集说明书</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210610_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8B%9F%E9%9B%86%E8%AF%B4%E6%98%8E%E4%B9%A6%E6%91%98%E8%A6%81.pdf">20210610_南京银行股份有限公司公开发行A股可转换公司债券募集说明书摘要</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210610_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E4%BF%A1%E7%94%A8%E8%AF%84%E7%BA%A7%E6%8A%A5%E5%91%8A.pdf">20210610_南京银行股份有限公司公开发行A股可转换公司债券信用评级报告</a></p>
-</li>
+<li>一个有效的数独（部分已被填充）不一定是可解的。</li>
+<li>只需要根据以上规则，验证已经填入的数字是否有效即可。</li>
+<li>空白格用 <code>&#39;.&#39;</code> 表示。</li>
 </ul>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article1/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article1/01.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：board = </span><br><span class="line">[[&quot;5&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;,&quot;9&quot;,&quot;5&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;9&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;3&quot;]</span><br><span class="line">,[&quot;4&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;]</span><br><span class="line">,[&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;8&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;4&quot;,&quot;1&quot;,&quot;9&quot;,&quot;.&quot;,&quot;.&quot;,&quot;5&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;9&quot;]]</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：board = </span><br><span class="line">[[&quot;8&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;,&quot;9&quot;,&quot;5&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;9&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;3&quot;]</span><br><span class="line">,[&quot;4&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;]</span><br><span class="line">,[&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;8&quot;,&quot;.&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;4&quot;,&quot;1&quot;,&quot;9&quot;,&quot;.&quot;,&quot;.&quot;,&quot;5&quot;]</span><br><span class="line">,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;9&quot;]]</span><br><span class="line">输出：false</span><br><span class="line">解释：除了第一行的第一个数字从 5 改为 8 以外，空格内其他数字均与 示例1 相同。 但由于位于左上角的 3x3 宫内有两个 8 存在, 因此这个数独是无效的。</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
 <ul>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210610_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8C%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8F%91%E8%A1%8C%E5%85%AC%E5%91%8A.pdf">20210610_南京银行股份有限公司公开发行可转换公司债券发行公告</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210616_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8C%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E7%BD%91%E4%B8%8A%E4%B8%AD%E7%AD%BE%E7%8E%87%E5%8F%8A%E7%BD%91%E4%B8%8B%E9%85%8D%E5%94%AE%E7%BB%93%E6%9E%9C%E5%85%AC%E5%91%8A.pdf">20210616_南京银行股份有限公司公开发行可转换公司债券网上中签率及网下配售结果公告</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210617_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8C%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E7%BD%91%E4%B8%8A%E4%B8%AD%E7%AD%BE%E7%BB%93%E6%9E%9C%E5%85%AC%E5%91%8A.pdf">20210617_南京银行股份有限公司公开发行可转换公司债券网上中签结果公告</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210621_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8C%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8F%91%E8%A1%8C%E7%BB%93%E6%9E%9C%E5%85%AC%E5%91%8A.pdf">20210621_南京银行股份有限公司公开发行可转换公司债券发行结果公告</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210629_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E4%B8%8A%E5%B8%82%E5%85%AC%E5%91%8A%E4%B9%A6.pdf">20210629_南京银行股份有限公司公开发行A股可转换公司债券上市公告书</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210629_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%B3%E4%BA%8E%E7%AD%BE%E7%BD%B2%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8B%9F%E9%9B%86%E8%B5%84%E9%87%91%E4%B8%93%E6%88%B7%E5%AD%98%E5%82%A8%E7%9B%91%E7%AE%A1%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%85%AC%E5%91%8A.pdf">20210629_南京银行股份有限公司关于签署公开发行A股可转换公司债券募集资金专户存储监管协议的公告</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210703_2021%E5%B9%B4%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E8%B7%9F%E8%B8%AA%E8%AF%84%E7%BA%A7%E6%8A%A5%E5%91%8A.pdf">20210703_2021年南京银行股份有限公司跟踪评级报告</a></p>
-</li>
-<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210703_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%B3%E4%BA%8EA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B82021%E5%B9%B4%E8%B7%9F%E8%B8%AA%E8%AF%84%E7%BA%A7%E7%BB%93%E6%9E%9C%E7%9A%84%E5%85%AC%E5%91%8A.pdf">20210703_南京银行股份有限公司关于A股可转换公司债券2021年跟踪评级结果的公告</a></p>
-</li>
+<li><code>board.length == 9</code></li>
+<li><code>board[i].length == 9</code></li>
+<li><code>board[i][j]</code> 是一位数字（<code>1-9</code>）或者 <code>&#39;.&#39;</code></li>
 </ul>
-<h3 id="可转债"><a href="#可转债" class="headerlink" title="可转债"></a>可转债</h3><blockquote>
-<p><strong>可转换债券</strong>（Convertible Bond，CB），简称<strong>可转债</strong>，又作<strong>可换股债券</strong>，是一种混合债券及<a href="https://zh.wikipedia.org/wiki/%E9%87%91%E8%9E%8D%E8%A1%8D%E7%94%9F%E5%93%81">金融衍生品</a>可按一定规则转换为债券发行公司的<a href="https://zh.wikipedia.org/wiki/%E8%82%A1%E7%A5%A8">股票</a>；其转换价格、转换时间段会在发行前确定。由于附加了认股权证（<a href="https://zh.wikipedia.org/wiki/%E6%9C%9F%E6%9D%83">期权</a>）等多种权益，可转换债券通常<a href="https://zh.wikipedia.org/w/index.php?title=%E7%A5%A8%E9%9D%A2%E5%88%A9%E7%8E%87&action=edit&redlink=1">票面利率</a>较一般企业债券低。从发行者的角度看，用可转换债券融资的主要优势在于可以减少<a href="https://zh.wikipedia.org/wiki/%E5%88%A9%E6%81%AF">利息</a>费用，增加股权融资，降低负债率，但如果债券被转换，公司原股东的股权将被<a href="https://zh.wikipedia.org/w/index.php?title=%E8%82%A1%E6%9D%83%E7%A8%80%E9%87%8A&action=edit&redlink=1">稀释</a>。</p>
-</blockquote>
-<h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><h4 id="提高中签概率"><a href="#提高中签概率" class="headerlink" title="提高中签概率"></a>提高中签概率</h4>]]></content>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看题目可知，有效的数独是指每行/每列/每个3*3的方格，均无重复元素出现。所以，答题也按这个思路去做即可</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isValidSudoku</span><span class="params">(<span class="keyword">char</span>[][] board)</span> </span>&#123;</span><br><span class="line">        Map&lt;Character, Boolean&gt;[][] maps = <span class="keyword">new</span> HashMap[<span class="number">3</span>][<span class="number">3</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; board.length; i++) &#123;</span><br><span class="line">            Map&lt;Character, Boolean&gt; rowMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            Map&lt;Character, Boolean&gt; columnMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; board[i].length; j++) &#123;</span><br><span class="line">                <span class="comment">//检测行</span></span><br><span class="line">                <span class="keyword">if</span>(board[i][j] != <span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                    Boolean exists = rowMap.put(board[i][j], <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">if</span>(<span class="keyword">null</span> != exists) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//检测列</span></span><br><span class="line">                <span class="keyword">if</span>(board[j][i] != <span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                    Boolean exists = columnMap.put(board[j][i], <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">if</span>(<span class="keyword">null</span> != exists) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//检测矩阵</span></span><br><span class="line">                <span class="keyword">if</span>(board[i][j] != <span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>( <span class="keyword">null</span> == maps[i/<span class="number">3</span>][j/<span class="number">3</span>] )&#123;</span><br><span class="line">                        maps[i/<span class="number">3</span>][j/<span class="number">3</span>] = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">                    &#125;</span><br><span class="line">                    Boolean exists = maps[i/<span class="number">3</span>][j/<span class="number">3</span>].put(board[i][j], <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">if</span>(<span class="keyword">null</span> != exists) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            rowMap.clear();</span><br><span class="line">            columnMap.clear();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>题目转载自：<a href="https://leetcode-cn.com/problems/valid-sudoku">https://leetcode-cn.com/problems/valid-sudoku</a></p>
+]]></content>
       <categories>
-        <category>投资</category>
+        <category>算法</category>
       </categories>
       <tags>
-        <tag>可转债</tag>
-        <tag>理财</tag>
-        <tag>低风险</tag>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>Java</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2021/09/06/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>十分钟学习一个日常定位bug技巧之Arthas工具</title>
@@ -190,10 +191,56 @@
         <category>Java</category>
       </categories>
       <tags>
+        <tag>Java</tag>
         <tag>Bug</tag>
         <tag>Arthas</tag>
         <tag>JVM</tag>
-        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>可转债</title>
+    <url>/2021/09/14/%E5%8F%AF%E8%BD%AC%E5%80%BA/</url>
+    <content><![CDATA[<p>本篇为可转债的入门文章，主要以<a href="https://xueqiu.com/S/SH113050">南银转债(SH:113050)</a>为例，介绍可转债的相关概念。</p>
+<span id="more"></span>
+
+<p>首先附上南银转债相关的发行公告(资料来源：<a href="http://www.sse.com.cn/disclosure/listedinfo/announcement/">上海证券交易所</a>)</p>
+<ul>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210610_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8B%9F%E9%9B%86%E8%AF%B4%E6%98%8E%E4%B9%A6.pdf">20210610_南京银行股份有限公司公开发行A股可转换公司债券募集说明书</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210610_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8B%9F%E9%9B%86%E8%AF%B4%E6%98%8E%E4%B9%A6%E6%91%98%E8%A6%81.pdf">20210610_南京银行股份有限公司公开发行A股可转换公司债券募集说明书摘要</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210610_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E4%BF%A1%E7%94%A8%E8%AF%84%E7%BA%A7%E6%8A%A5%E5%91%8A.pdf">20210610_南京银行股份有限公司公开发行A股可转换公司债券信用评级报告</a></p>
+</li>
+</ul>
+<ul>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210610_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8C%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8F%91%E8%A1%8C%E5%85%AC%E5%91%8A.pdf">20210610_南京银行股份有限公司公开发行可转换公司债券发行公告</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210616_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8C%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E7%BD%91%E4%B8%8A%E4%B8%AD%E7%AD%BE%E7%8E%87%E5%8F%8A%E7%BD%91%E4%B8%8B%E9%85%8D%E5%94%AE%E7%BB%93%E6%9E%9C%E5%85%AC%E5%91%8A.pdf">20210616_南京银行股份有限公司公开发行可转换公司债券网上中签率及网下配售结果公告</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210617_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8C%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E7%BD%91%E4%B8%8A%E4%B8%AD%E7%AD%BE%E7%BB%93%E6%9E%9C%E5%85%AC%E5%91%8A.pdf">20210617_南京银行股份有限公司公开发行可转换公司债券网上中签结果公告</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210621_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8C%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8F%91%E8%A1%8C%E7%BB%93%E6%9E%9C%E5%85%AC%E5%91%8A.pdf">20210621_南京银行股份有限公司公开发行可转换公司债券发行结果公告</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210629_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E4%B8%8A%E5%B8%82%E5%85%AC%E5%91%8A%E4%B9%A6.pdf">20210629_南京银行股份有限公司公开发行A股可转换公司债券上市公告书</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210629_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%B3%E4%BA%8E%E7%AD%BE%E7%BD%B2%E5%85%AC%E5%BC%80%E5%8F%91%E8%A1%8CA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B8%E5%8B%9F%E9%9B%86%E8%B5%84%E9%87%91%E4%B8%93%E6%88%B7%E5%AD%98%E5%82%A8%E7%9B%91%E7%AE%A1%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%85%AC%E5%91%8A.pdf">20210629_南京银行股份有限公司关于签署公开发行A股可转换公司债券募集资金专户存储监管协议的公告</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210703_2021%E5%B9%B4%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E8%B7%9F%E8%B8%AA%E8%AF%84%E7%BA%A7%E6%8A%A5%E5%91%8A.pdf">20210703_2021年南京银行股份有限公司跟踪评级报告</a></p>
+</li>
+<li><p><a href="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/0914/article1/20210703_%E5%8D%97%E4%BA%AC%E9%93%B6%E8%A1%8C%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%B3%E4%BA%8EA%E8%82%A1%E5%8F%AF%E8%BD%AC%E6%8D%A2%E5%85%AC%E5%8F%B8%E5%80%BA%E5%88%B82021%E5%B9%B4%E8%B7%9F%E8%B8%AA%E8%AF%84%E7%BA%A7%E7%BB%93%E6%9E%9C%E7%9A%84%E5%85%AC%E5%91%8A.pdf">20210703_南京银行股份有限公司关于A股可转换公司债券2021年跟踪评级结果的公告</a></p>
+</li>
+</ul>
+<h3 id="可转债"><a href="#可转债" class="headerlink" title="可转债"></a>可转债</h3><blockquote>
+<p><strong>可转换债券</strong>（Convertible Bond，CB），简称<strong>可转债</strong>，又作<strong>可换股债券</strong>，是一种混合债券及<a href="https://zh.wikipedia.org/wiki/%E9%87%91%E8%9E%8D%E8%A1%8D%E7%94%9F%E5%93%81">金融衍生品</a>可按一定规则转换为债券发行公司的<a href="https://zh.wikipedia.org/wiki/%E8%82%A1%E7%A5%A8">股票</a>；其转换价格、转换时间段会在发行前确定。由于附加了认股权证（<a href="https://zh.wikipedia.org/wiki/%E6%9C%9F%E6%9D%83">期权</a>）等多种权益，可转换债券通常<a href="https://zh.wikipedia.org/w/index.php?title=%E7%A5%A8%E9%9D%A2%E5%88%A9%E7%8E%87&action=edit&redlink=1">票面利率</a>较一般企业债券低。从发行者的角度看，用可转换债券融资的主要优势在于可以减少<a href="https://zh.wikipedia.org/wiki/%E5%88%A9%E6%81%AF">利息</a>费用，增加股权融资，降低负债率，但如果债券被转换，公司原股东的股权将被<a href="https://zh.wikipedia.org/w/index.php?title=%E8%82%A1%E6%9D%83%E7%A8%80%E9%87%8A&action=edit&redlink=1">稀释</a>。</p>
+</blockquote>
+<h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><h4 id="提高中签概率"><a href="#提高中签概率" class="headerlink" title="提高中签概率"></a>提高中签概率</h4>]]></content>
+      <categories>
+        <category>投资</category>
+      </categories>
+      <tags>
+        <tag>可转债</tag>
+        <tag>理财</tag>
+        <tag>低风险</tag>
       </tags>
   </entry>
 </search>
