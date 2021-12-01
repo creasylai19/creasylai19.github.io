@@ -23,32 +23,33 @@
   <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"lilongsheng.tech","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="题目给你一个字符串 s ，其中包含字母顺序打乱的用英文单词表示的若干数字（0-9）。按 升序 返回原始的数字。">
+<meta name="description" content="题目给定一个正整数 n ，输出外观数列的第 n 项。 「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。 你可以将其视作是由递归公式定义的数字字符串序列：  countAndSay(1) &#x3D; &quot;1&quot;  countAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode423-从英文中重建数字">
-<meta property="og:url" content="https://lilongsheng.tech/2021/11/24/LeetCode423/index.html">
+<meta property="og:title" content="LeetCode38-外观数列">
+<meta property="og:url" content="https://lilongsheng.tech/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/index.html">
 <meta property="og:site_name" content="creasylai19">
-<meta property="og:description" content="题目给你一个字符串 s ，其中包含字母顺序打乱的用英文单词表示的若干数字（0-9）。按 升序 返回原始的数字。">
+<meta property="og:description" content="题目给定一个正整数 n ，输出外观数列的第 n 项。 「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。 你可以将其视作是由递归公式定义的数字字符串序列：  countAndSay(1) &#x3D; &quot;1&quot;  countAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article2/01.png">
-<meta property="article:published_time" content="2021-11-24T14:31:16.000Z">
-<meta property="article:modified_time" content="2021-11-24T14:45:33.425Z">
+<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1201/article01/00.png">
+<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1201/article01/01.png">
+<meta property="article:published_time" content="2021-12-01T13:28:23.000Z">
+<meta property="article:modified_time" content="2021-12-01T14:01:44.518Z">
 <meta property="article:author" content="creasylai19">
 <meta property="article:tag" content="LeetCode">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article2/01.png">
+<meta name="twitter:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1201/article01/00.png">
 
 
-<link rel="canonical" href="https://lilongsheng.tech/2021/11/24/LeetCode423/">
+<link rel="canonical" href="https://lilongsheng.tech/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lilongsheng.tech/2021/11/24/LeetCode423/","path":"2021/11/24/LeetCode423/","title":"LeetCode423-从英文中重建数字"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lilongsheng.tech/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/","path":"2021/12/01/LeetCode38-外观数列/","title":"LeetCode38-外观数列"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>LeetCode423-从英文中重建数字 | creasylai19</title>
+<title>LeetCode38-外观数列 | creasylai19</title>
   
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -236,7 +237,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2021/11/24/LeetCode423/">
+    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://img2.doubanio.com/icon/ul106293348-12.jpg">
@@ -249,7 +250,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          LeetCode423-从英文中重建数字
+          LeetCode38-外观数列
         </h1>
 
         <div class="post-meta-container">
@@ -261,7 +262,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2021-11-24 22:31:16 / 修改时间：22:45:33" itemprop="dateCreated datePublished" datetime="2021-11-24T22:31:16+08:00">2021-11-24</time>
+      <time title="创建时间：2021-12-01 21:28:23 / 修改时间：22:01:44" itemprop="dateCreated datePublished" datetime="2021-12-01T21:28:23+08:00">2021-12-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -287,14 +288,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.6k</span>
+      <span>1.5k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -305,34 +306,40 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串 <code>s</code> ，其中包含字母顺序打乱的用英文单词表示的若干数字（<code>0-9</code>）。按 <strong>升序</strong> 返回原始的数字。</p>
+        <h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个正整数<code> n</code> ，输出外观数列的第 <code>n</code> 项。</p>
+<p>「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。</p>
+<p>你可以将其视作是由递归公式定义的数字字符串序列：</p>
+<ul>
+<li><p><code>countAndSay(1) = &quot;1&quot;</code></p>
+</li>
+<li><p><code>countAndSay(n)</code> 是对<code> countAndSay(n-1)</code> 的描述，然后转换成另一个数字字符串。</p>
+</li>
+</ul>
  <span id="more"></span>
 
+<p>前五项如下：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1.     1</span><br><span class="line">2.     11</span><br><span class="line">3.     21</span><br><span class="line">4.     1211</span><br><span class="line">5.     111221</span><br><span class="line">第一项是数字 1 </span><br><span class="line">描述前一项，这个数是 1 即 “ 一 个 1 ”，记作 &quot;11&quot;</span><br><span class="line">描述前一项，这个数是 11 即 “ 二 个 1 ” ，记作 &quot;21&quot;</span><br><span class="line">描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 &quot;1211&quot;</span><br><span class="line">描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 &quot;111221&quot;</span><br></pre></td></tr></table></figure>
+
+<p>要 <strong>描述</strong>  一个数字字符串，首先要将字符串分割为 <strong>最小</strong> 数量的组，每个组都由连续的最多 <strong>相同字符</strong> 组成。然后对于每个组，先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。</p>
+<p>例如，数字字符串<code> &quot;3322251&quot;</code> 的描述如下图：</p>
+<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1201/article01/00.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1201/article01/00.png"></p>
 <p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;owoztneoer&quot;</span><br><span class="line">输出：&quot;012&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：n = 1</span><br><span class="line">输出：&quot;1&quot;</span><br><span class="line">解释：这是一个基本样例。</span><br></pre></td></tr></table></figure>
+
 
 <p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;fviefuro&quot;</span><br><span class="line">输出：&quot;45&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：n = 4</span><br><span class="line">输出：&quot;1211&quot;</span><br><span class="line">解释：</span><br><span class="line">countAndSay(1) = &quot;1&quot;</span><br><span class="line">countAndSay(2) = 读 &quot;1&quot; = 一 个 1 = &quot;11&quot;</span><br><span class="line">countAndSay(3) = 读 &quot;11&quot; = 二 个 1 = &quot;21&quot;</span><br><span class="line">countAndSay(4) = 读 &quot;21&quot; = 一 个 2 + 一 个 1 = &quot;12&quot; + &quot;11&quot; = &quot;1211&quot;</span><br></pre></td></tr></table></figure>
 
-
-
-<p>提示：</p>
+<p><strong>提示：</strong></p>
 <ul>
-<li>1 &lt;= s.length &lt;= 105</li>
-<li>s[i] 为 [“e”,”g”,”f”,”i”,”h”,”o”,”n”,”s”,”r”,”u”,”t”,”w”,”v”,”x”,”z”] 这些字符之一</li>
-<li>s 保证是一个符合题目要求的字符串</li>
+<li><code>1 &lt;= n &lt;= 30</code></li>
 </ul>
-<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目后，大概猜出可能需要每个数字的特定字母做标识，所以干脆列出0-9数字的英文单词观察</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ZERO = <span class="string">&quot;zero&quot;</span>;<span class="comment">//Z</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ONE = <span class="string">&quot;one&quot;</span>;<span class="comment">//Z,W,U-&gt;O</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String TWO = <span class="string">&quot;two&quot;</span>;<span class="comment">//W</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String THREE = <span class="string">&quot;three&quot;</span>;<span class="comment">//Z,U-&gt;R</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String FOUR = <span class="string">&quot;four&quot;</span>;<span class="comment">//U</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String FIVE = <span class="string">&quot;five&quot;</span>;<span class="comment">//U-&gt;F</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SIX = <span class="string">&quot;six&quot;</span>;<span class="comment">//X</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SEVEN = <span class="string">&quot;seven&quot;</span>;<span class="comment">//X-&gt;S</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String EIGHT = <span class="string">&quot;eight&quot;</span>;<span class="comment">//G</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String NINE = <span class="string">&quot;nine&quot;</span>;<span class="comment">//G,X,U-&gt;F-&gt;I</span></span><br></pre></td></tr></table></figure>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目后，觉得用顺推的思路比较容易。我们可以依次算出第1个、第2个、第3个…第n-1个外观数列，则第n个外观数列也容易算出</p>
+<p>代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">countAndSay</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">&quot;1&quot;</span>;</span><br><span class="line">        <span class="keyword">int</span> loop = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> ( loop &lt; n )&#123;</span><br><span class="line">            loop++;</span><br><span class="line">            str = getNextStr(str);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getNextStr</span><span class="params">(String input)</span></span>&#123;</span><br><span class="line">        <span class="keyword">char</span> start = input.charAt(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; input.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>( input.charAt(i) != start )&#123;</span><br><span class="line">                sb.append(count);</span><br><span class="line">                sb.append(start);</span><br><span class="line">                start = input.charAt(i);</span><br><span class="line">                count = <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sb.append(count);</span><br><span class="line">        sb.append(start);</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>如上，观察后得出，可以分三轮，计算出每个数字的出现次数</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一轮，选出zero,two,four,six,eight</span></span><br><span class="line"><span class="comment">//第二轮，选出one,three,five,seven</span></span><br><span class="line"><span class="comment">//第三轮，选出nine</span></span><br></pre></td></tr></table></figure>
-
-<p>得出方法后，代码就很容易写了</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Optional;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">originalDigits</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//首先把s做分解，用Map&lt;Character, Integer&gt;做容器</span></span><br><span class="line">        Map&lt;Character, Integer&gt; wordCount = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = s.charAt(i);</span><br><span class="line">            <span class="keyword">if</span>( wordCount.containsKey(c) )&#123;</span><br><span class="line">                wordCount.put(c, wordCount.get(c)+<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                wordCount.put(c, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] numCount = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="comment">//第一轮</span></span><br><span class="line">        numCount[<span class="number">0</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;z&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">2</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;w&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">4</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;u&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">6</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;x&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">8</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;g&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//第二轮</span></span><br><span class="line">        numCount[<span class="number">1</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;o&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">0</span>]-numCount[<span class="number">2</span>]-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">3</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;r&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">0</span>]-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">5</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;f&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">7</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;s&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">6</span>];</span><br><span class="line">        <span class="comment">//第三轮</span></span><br><span class="line">        numCount[<span class="number">9</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;i&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">5</span>]-numCount[<span class="number">6</span>]-numCount[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numCount.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numCount[i]; j++) &#123;</span><br><span class="line">                sb.append(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article2/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1124/article2/01.png"></p>
-<p>题目转载自：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/reconstruct-original-digits-from-english">https://leetcode-cn.com/problems/reconstruct-original-digits-from-english</a></p>
+<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1201/article01/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1201/article01/01.png"></p>
+<p>题目转载自：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/count-and-say">https://leetcode-cn.com/problems/count-and-say</a></p>
 
     </div>
 
@@ -346,7 +353,7 @@
       <div class="popular-posts-title"><a href="/2021/11/23/LeetCode36/" rel="bookmark">LeetCode36-有效的数独</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2021/12/01/LeetCode38-外观数列/" rel="bookmark">LeetCode38-外观数列</a></div>
+      <div class="popular-posts-title"><a href="/2021/11/24/LeetCode423/" rel="bookmark">LeetCode423-从英文中重建数字</a></div>
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/2021/09/06/十分钟学习一个日常定位bug技巧之Arthas工具/" rel="bookmark">十分钟学习一个日常定位bug技巧之Arthas工具</a></div>
@@ -370,7 +377,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://lilongsheng.tech/2021/11/24/LeetCode423/" title="LeetCode423-从英文中重建数字">https://lilongsheng.tech/2021/11/24/LeetCode423/</a>
+      <a href="https://lilongsheng.tech/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/" title="LeetCode38-外观数列">https://lilongsheng.tech/2021/12/01/LeetCode38-外观数列/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -388,14 +395,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/11/23/LeetCode36/" rel="prev" title="LeetCode36-有效的数独">
-                  <i class="fa fa-chevron-left"></i> LeetCode36-有效的数独
+                <a href="/2021/11/24/LeetCode423/" rel="prev" title="LeetCode423-从英文中重建数字">
+                  <i class="fa fa-chevron-left"></i> LeetCode423-从英文中重建数字
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/" rel="next" title="LeetCode38-外观数列">
-                  LeetCode38-外观数列 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
