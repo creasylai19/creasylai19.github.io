@@ -331,4 +331,45 @@
         <tag>Java</tag>
       </tags>
   </entry>
+  <entry>
+    <title>LeetCode807-保持城市天际线</title>
+    <url>/2021/12/13/LeetCode807-%E4%BF%9D%E6%8C%81%E5%9F%8E%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF/</url>
+    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一座由 <code>n x n</code> 个街区组成的城市，每个街区都包含一座立方体建筑。给你一个下标从 <strong>0</strong> 开始的 <code>n x n</code> 整数矩阵 <code>grid</code> ，其中 <code>grid[r][c]</code> 表示坐落于 <code>r</code> 行 <code>c</code> 列的建筑物的 <strong>高度</strong> 。</p>
+<p>城市的 <strong>天际线</strong> 是从远处观察城市时，所有建筑物形成的外部轮廓。从东、南、西、北四个主要方向观测到的 <strong>天际线</strong> 可能不同。</p>
+<p>我们被允许为 <strong>任意数量的建筑物</strong> 的高度增加 <strong>任意增量（不同建筑物的增量可能不同）</strong> 。 高度为 <code>0</code> 的建筑物的高度也可以增加。然而，增加的建筑物高度 <strong>不能影响</strong> 从任何主要方向观察城市得到的 <strong>天际线</strong> 。</p>
+<p>在 <strong>不改变</strong> 从任何主要方向观测到的城市 <strong>天际线</strong> 的前提下，返回建筑物可以增加的 <strong>最大高度增量总和</strong> 。</p>
+<span id="more"></span>
+
+<p><strong>示例 1：</strong><br><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1213/article01/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1213/article01/01.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：grid = [[3,0,8,4],[2,4,5,7],[9,2,6,3],[0,3,1,0]]</span><br><span class="line">输出：35</span><br><span class="line">解释：建筑物的高度如上图中心所示。</span><br><span class="line">用红色绘制从不同方向观看得到的天际线。</span><br><span class="line">在不影响天际线的情况下，增加建筑物的高度：</span><br><span class="line">gridNew = [ [8, 4, 8, 7],</span><br><span class="line">            [7, 4, 7, 7],</span><br><span class="line">            [9, 4, 8, 7],</span><br><span class="line">            [3, 3, 3, 3] ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：grid = [[0,0,0],[0,0,0],[0,0,0]]</span><br><span class="line">输出：0</span><br><span class="line">解释：增加任何建筑物的高度都会导致天际线的变化。</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>n == grid.length</code></li>
+<li><code>n == grid[r].length</code></li>
+<li><code>2 &lt;= n &lt;= 50</code></li>
+<li><code>0 &lt;= grid[r][c] &lt;= 100</code></li>
+</ul>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目可知，只要建筑物增加的高度不高于其所在行&amp;所在列的最小值，则不会影响天际线。所以，解题也就从计算行列最小值-当前建筑物的高度，则为当前建筑物可增加的高度</p>
+<p>代码如下(代码有优化的空间，懒得处理了)：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxIncreaseKeepingSkyline</span><span class="params">(<span class="keyword">int</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] rowMax = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length];</span><br><span class="line">        <span class="keyword">int</span>[] colMax = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; grid.length; i++) &#123;</span><br><span class="line">            rowMax[i] = grid[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid[i].length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>( rowMax[i] &lt; grid[i][j] )&#123;</span><br><span class="line">                    rowMax[i] = grid[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//因为行列是相等的</span></span><br><span class="line">            colMax[i] = grid[<span class="number">0</span>][i];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>( colMax[i] &lt; grid[j][i] )&#123;</span><br><span class="line">                    colMax[i] = grid[j][i];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//        System.out.println(Arrays.toString(rowMax));</span></span><br><span class="line"><span class="comment">//        System.out.println(Arrays.toString(colMax));</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; grid.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; grid[i].length; j++) &#123;</span><br><span class="line">                sum += Math.min(rowMax[i], colMax[j]) - grid[i][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>题目转载自：<a href="https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline">https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
 </search>

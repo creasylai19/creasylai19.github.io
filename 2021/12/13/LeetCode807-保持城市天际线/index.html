@@ -23,43 +23,32 @@
   <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"lilongsheng.tech","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="你独处的能力，决定了你的人生高度你定位BUG的能力，决定了你的薪资高度-收录于《胡说八道全集》        平常编码工作中，我们会常遇到如下场景：本地运行没问题，但测试环境就是运行异常，棘手的是，看日志一切都是正常的。 遇到这种情况，常见的做法是到测试环境把class文件拉回本地反编译，比对测试环境代码是否部署有问题。 如果代码没问题，则添加打印参数的日志，再重新部署，再复现。这种方法可以解决">
+<meta name="description" content="题目给你一座由 n x n 个街区组成的城市，每个街区都包含一座立方体建筑。给你一个下标从 0 开始的 n x n 整数矩阵 grid ，其中 grid[r][c] 表示坐落于 r 行 c 列的建筑物的 高度 。 城市的 天际线 是从远处观察城市时，所有建筑物形成的外部轮廓。从东、南、西、北四个主要方向观测到的 天际线 可能不同。 我们被允许为 任意数量的建筑物 的高度增加 任意增量（不同建筑物的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="十分钟学习一个日常定位bug技巧之Arthas工具">
-<meta property="og:url" content="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:title" content="LeetCode807-保持城市天际线">
+<meta property="og:url" content="https://lilongsheng.tech/2021/12/13/LeetCode807-%E4%BF%9D%E6%8C%81%E5%9F%8E%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF/index.html">
 <meta property="og:site_name" content="creasylai19">
-<meta property="og:description" content="你独处的能力，决定了你的人生高度你定位BUG的能力，决定了你的薪资高度-收录于《胡说八道全集》        平常编码工作中，我们会常遇到如下场景：本地运行没问题，但测试环境就是运行异常，棘手的是，看日志一切都是正常的。 遇到这种情况，常见的做法是到测试环境把class文件拉回本地反编译，比对测试环境代码是否部署有问题。 如果代码没问题，则添加打印参数的日志，再重新部署，再复现。这种方法可以解决">
+<meta property="og:description" content="题目给你一座由 n x n 个街区组成的城市，每个街区都包含一座立方体建筑。给你一个下标从 0 开始的 n x n 整数矩阵 grid ，其中 grid[r][c] 表示坐落于 r 行 c 列的建筑物的 高度 。 城市的 天际线 是从远处观察城市时，所有建筑物形成的外部轮廓。从东、南、西、北四个主要方向观测到的 天际线 可能不同。 我们被允许为 任意数量的建筑物 的高度增加 任意增量（不同建筑物的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/02.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/03.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/04.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/05.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/06.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/07.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/08.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/09.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/10.png">
-<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/11.png">
-<meta property="article:published_time" content="2021-09-06T15:20:30.000Z">
-<meta property="article:modified_time" content="2021-09-10T17:19:12.188Z">
+<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1213/article01/01.png">
+<meta property="article:published_time" content="2021-12-13T13:30:10.000Z">
+<meta property="article:modified_time" content="2021-12-13T13:44:52.115Z">
 <meta property="article:author" content="creasylai19">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="算法">
 <meta property="article:tag" content="Java">
-<meta property="article:tag" content="Bug">
-<meta property="article:tag" content="Arthas">
-<meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png">
+<meta name="twitter:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1213/article01/01.png">
 
 
-<link rel="canonical" href="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/">
+<link rel="canonical" href="https://lilongsheng.tech/2021/12/13/LeetCode807-%E4%BF%9D%E6%8C%81%E5%9F%8E%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/","path":"2021/09/06/十分钟学习一个日常定位bug技巧之Arthas工具/","title":"十分钟学习一个日常定位bug技巧之Arthas工具"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lilongsheng.tech/2021/12/13/LeetCode807-%E4%BF%9D%E6%8C%81%E5%9F%8E%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF/","path":"2021/12/13/LeetCode807-保持城市天际线/","title":"LeetCode807-保持城市天际线"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>十分钟学习一个日常定位bug技巧之Arthas工具 | creasylai19</title>
+<title>LeetCode807-保持城市天际线 | creasylai19</title>
   
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -155,7 +144,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -168,6 +157,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">2.</span> <span class="nav-text">解答</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -246,7 +236,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/">
+    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2021/12/13/LeetCode807-%E4%BF%9D%E6%8C%81%E5%9F%8E%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://img2.doubanio.com/icon/ul106293348-12.jpg">
@@ -259,7 +249,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          十分钟学习一个日常定位bug技巧之Arthas工具
+          LeetCode807-保持城市天际线
         </h1>
 
         <div class="post-meta-container">
@@ -269,23 +259,17 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-09-06 23:20:30" itemprop="dateCreated datePublished" datetime="2021-09-06T23:20:30+08:00">2021-09-06</time>
+      <time title="创建时间：2021-12-13 21:30:10 / 修改时间：21:44:52" itemprop="dateCreated datePublished" datetime="2021-12-13T21:30:10+08:00">2021-12-13</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-09-11 01:19:12" itemprop="dateModified" datetime="2021-09-11T01:19:12+08:00">2021-09-11</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
         </span>
     </span>
 
@@ -303,14 +287,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.7k</span>
+      <span>1.5k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -321,67 +305,34 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <blockquote class="blockquote-center-cus">
-<div style="text-align:center;">你独处的能力，决定了你的人生高度</div><div style="text-align:center">你定位BUG的能力，决定了你的薪资高度</div><div style="text-align:right;padding-right:20px;">-收录于《胡说八道全集》    </div>
-</blockquote>
-
-
-<p>平常编码工作中，我们会常遇到如下场景：本地运行没问题，但测试环境就是运行异常，棘手的是，看日志一切都是正常的。</p>
-<p>遇到这种情况，常见的做法是到测试环境把class文件拉回本地反编译，比对测试环境代码是否部署有问题。</p>
-<p>如果代码没问题，则添加打印参数的日志，再重新部署，再复现。这种方法可以解决问题，但一系列的操作，还是太费时间。</p>
-<p>这里介绍一个工具<code>Arthas</code>，它可以直接在运行中的服务把JVM中的class字节码反编译，修改反编译后的代码，再直接重新发布到JVM中，整个过程，不用重启服务。</p>
+        <h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一座由 <code>n x n</code> 个街区组成的城市，每个街区都包含一座立方体建筑。给你一个下标从 <strong>0</strong> 开始的 <code>n x n</code> 整数矩阵 <code>grid</code> ，其中 <code>grid[r][c]</code> 表示坐落于 <code>r</code> 行 <code>c</code> 列的建筑物的 <strong>高度</strong> 。</p>
+<p>城市的 <strong>天际线</strong> 是从远处观察城市时，所有建筑物形成的外部轮廓。从东、南、西、北四个主要方向观测到的 <strong>天际线</strong> 可能不同。</p>
+<p>我们被允许为 <strong>任意数量的建筑物</strong> 的高度增加 <strong>任意增量（不同建筑物的增量可能不同）</strong> 。 高度为 <code>0</code> 的建筑物的高度也可以增加。然而，增加的建筑物高度 <strong>不能影响</strong> 从任何主要方向观察城市得到的 <strong>天际线</strong> 。</p>
+<p>在 <strong>不改变</strong> 从任何主要方向观测到的城市 <strong>天际线</strong> 的前提下，返回建筑物可以增加的 <strong>最大高度增量总和</strong> 。</p>
 <span id="more"></span>
 
-<p>下面介绍整个过程，目录如下：</p>
-<ol>
-<li>运行Arthas</li>
-<li>反编译class字节码</li>
-<li>修改代码</li>
-<li>发布到JVM</li>
-</ol>
-<p>以Arthas官网的Demo为例：</p>
-<p>下载Arthas：<a target="_blank" rel="noopener" href="https://github.com/alibaba/arthas/releases">https://github.com/alibaba/arthas/releases</a></p>
-<p>运行Demo程序，<code>java -jar math-game.jar</code>。这是一个每隔一秒通过Random获取随机数，然后做质因数分解，并打印出分解结果的小程序</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/01.png"></p>
-<p>运行Arthas，<code>java -jar arthas-boot.jar</code></p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/02.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/02.png"></p>
-<p>运行后，arthas会打印出当前所有的Java进程，根据中括号中的ID选择要处理的进程。如，输入1，然后按ENTER</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/03.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/03.png"></p>
-<p>这时候，arthas已经attach上前面运行的math-game程序。main_class也显示了该程序的主类</p>
-<p>我们以这个demo.MathGame为例，反编译它<code>jad demo.MathGame</code></p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/04.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/04.png"></p>
-<p>如上图，可见反编译后的main函数为一个死循环，每隔一秒运行一次run函数。</p>
-<p>我们把反编译后的代码存到本地<code>jad demo.MathGame --source-only --lineNumber false &gt; MathGame.java</code>，这样，在运行arthas的目录下就生成了MathGame.java文件。</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/05.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/05.png"></p>
-<p>我们编辑它，在它run函数中加一个打印语句<code>System.out.println(&quot;动态加的代码，打印number值为：&quot; + number)</code></p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/06.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/06.png"></p>
-<p>加了代码后，我们可以自己用javac工具编译，也可以用arthas提供mc(Memory Compiler/内存编译器)工具编译</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/07.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/07.png"></p>
-<p>如上，编译得到MathGame.class字节码文件，下面则是通过arthas的redefine命令发布到JVM中</p>
-<p>发布前，我们再次确认，当前MathGame运行的结果是</p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/08.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/08.png"></p>
-<p>没有执行我们加入的代码<code>System.out.println(&quot;动态加的代码，打印number值为：&quot; + number)</code></p>
-<p>执行<code>redefine /Users/creasylai/program/arthas-bin/demo/MathGame.class</code></p>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/09.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/09.png"></p>
-<p>再观察MathGame运行的结果 </p>
-<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/10.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/10.png"></p>
-<p>这时候，我们加入的代码就已经执行了。</p>
-<hr>
-<p>其他：</p>
-<ol>
-<li><p>其实arthas提供了watch命令，可以直接观察方法执行的入参、返回值等，在上方的场景，我们没必要加打印语句了</p>
-<p>执行命令<code>watch demo.MathGame primeFactors &quot;&#123;params,returnObj&#125;&quot; -x 2&quot;</code></p>
-</li>
-</ol>
-<p> <img src="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/11.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/20210906/article1/11.png"></p>
-<p>如上图，入参和返回值都打印出来了(返回值为null是因为p rimeFactors方法抛出异常了)</p>
-<ol start="2">
-<li>arthas还有很多有用的命令，如trace可以追踪每个函数的执行耗时，dashboard可以查看程序的运行状态等</li>
-</ol>
-<p>下方链接为arthas在线教程</p>
-<p>基础教程【十分钟】<a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&amp;id=arthas-basics">https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&amp;id=arthas-basics</a></p>
-<p>进阶教程【十分钟】<a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&amp;id=arthas-advanced">https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&amp;id=arthas-advanced</a></p>
-<p>参考文档：<a target="_blank" rel="noopener" href="https://arthas.aliyun.com/zh-cn/">https://arthas.aliyun.com/zh-cn/</a></p>
+<p><strong>示例 1：</strong><br><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1213/article01/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2021/1213/article01/01.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">输入：grid = [[3,0,8,4],[2,4,5,7],[9,2,6,3],[0,3,1,0]]</span><br><span class="line">输出：35</span><br><span class="line">解释：建筑物的高度如上图中心所示。</span><br><span class="line">用红色绘制从不同方向观看得到的天际线。</span><br><span class="line">在不影响天际线的情况下，增加建筑物的高度：</span><br><span class="line">gridNew = [ [8, 4, 8, 7],</span><br><span class="line">            [7, 4, 7, 7],</span><br><span class="line">            [9, 4, 8, 7],</span><br><span class="line">            [3, 3, 3, 3] ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：grid = [[0,0,0],[0,0,0],[0,0,0]]</span><br><span class="line">输出：0</span><br><span class="line">解释：增加任何建筑物的高度都会导致天际线的变化。</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>n == grid.length</code></li>
+<li><code>n == grid[r].length</code></li>
+<li><code>2 &lt;= n &lt;= 50</code></li>
+<li><code>0 &lt;= grid[r][c] &lt;= 100</code></li>
+</ul>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目可知，只要建筑物增加的高度不高于其所在行&amp;所在列的最小值，则不会影响天际线。所以，解题也就从计算行列最小值-当前建筑物的高度，则为当前建筑物可增加的高度</p>
+<p>代码如下(代码有优化的空间，懒得处理了)：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxIncreaseKeepingSkyline</span><span class="params">(<span class="keyword">int</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] rowMax = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length];</span><br><span class="line">        <span class="keyword">int</span>[] colMax = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; grid.length; i++) &#123;</span><br><span class="line">            rowMax[i] = grid[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid[i].length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>( rowMax[i] &lt; grid[i][j] )&#123;</span><br><span class="line">                    rowMax[i] = grid[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//因为行列是相等的</span></span><br><span class="line">            colMax[i] = grid[<span class="number">0</span>][i];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>( colMax[i] &lt; grid[j][i] )&#123;</span><br><span class="line">                    colMax[i] = grid[j][i];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//        System.out.println(Arrays.toString(rowMax));</span></span><br><span class="line"><span class="comment">//        System.out.println(Arrays.toString(colMax));</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; grid.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; grid[i].length; j++) &#123;</span><br><span class="line">                sum += Math.min(rowMax[i], colMax[j]) - grid[i][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>题目转载自：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline">https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline</a></p>
 
     </div>
 
@@ -401,7 +352,7 @@
       <div class="popular-posts-title"><a href="/2021/12/01/LeetCode38-外观数列/" rel="bookmark">LeetCode38-外观数列</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2021/12/13/LeetCode807-保持城市天际线/" rel="bookmark">LeetCode807-保持城市天际线</a></div>
+      <div class="popular-posts-title"><a href="/2021/09/06/十分钟学习一个日常定位bug技巧之Arthas工具/" rel="bookmark">十分钟学习一个日常定位bug技巧之Arthas工具</a></div>
     </li>
   </ul>
 
@@ -422,7 +373,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/" title="十分钟学习一个日常定位bug技巧之Arthas工具">https://lilongsheng.tech/2021/09/06/十分钟学习一个日常定位bug技巧之Arthas工具/</a>
+      <a href="https://lilongsheng.tech/2021/12/13/LeetCode807-%E4%BF%9D%E6%8C%81%E5%9F%8E%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF/" title="LeetCode807-保持城市天际线">https://lilongsheng.tech/2021/12/13/LeetCode807-保持城市天际线/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -431,24 +382,20 @@
 </div>
 
           <div class="post-tags">
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
               <a href="/tags/Java/" rel="tag"># Java</a>
-              <a href="/tags/Bug/" rel="tag"># Bug</a>
-              <a href="/tags/Arthas/" rel="tag"># Arthas</a>
-              <a href="/tags/JVM/" rel="tag"># JVM</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/09/06/hello-world/" rel="prev" title="Hello World">
-                  <i class="fa fa-chevron-left"></i> Hello World
+                <a href="/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/" rel="prev" title="LeetCode38-外观数列">
+                  <i class="fa fa-chevron-left"></i> LeetCode38-外观数列
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/09/10/Gitee%E5%AE%9E%E7%8E%B0%E5%9B%BE%E5%BA%8A/" rel="next" title="Gitee实现图床">
-                  Gitee实现图床 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
