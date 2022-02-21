@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNoto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lilongsheng.tech","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="这篇文章是2020年在CSDN发表的，因为最近要使用其中工具，所以做文章迁移  以下工具是基于JDK11.0.5版本 命令行工具jpsJava虚拟机进程状态工具 123456jps [options] [hostid]  -q 显示进程ID  -m 显示进程ID、主类名、传入主方法的参数  -l 显示进程ID、全类名  -v 显示进程ID、主类名、虚拟机参数  -V 显示进程ID、主类名【默认】">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用JVM分析工具">
+<meta property="og:url" content="https://lilongsheng.tech/2022/02/21/%E5%B8%B8%E7%94%A8JVM%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="creasylai19">
+<meta property="og:description" content="这篇文章是2020年在CSDN发表的，因为最近要使用其中工具，所以做文章迁移  以下工具是基于JDK11.0.5版本 命令行工具jpsJava虚拟机进程状态工具 123456jps [options] [hostid]  -q 显示进程ID  -m 显示进程ID、主类名、传入主方法的参数  -l 显示进程ID、全类名  -v 显示进程ID、主类名、虚拟机参数  -V 显示进程ID、主类名【默认】">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200324033931992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NyZWFzeWxhaTE5,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200324033956836.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NyZWFzeWxhaTE5,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2022-02-21T15:47:56.000Z">
+<meta property="article:modified_time" content="2022-02-21T15:53:17.840Z">
+<meta property="article:author" content="creasylai19">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Bug">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200324033931992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NyZWFzeWxhaTE5,size_16,color_FFFFFF,t_70">
+
+
+<link rel="canonical" href="https://lilongsheng.tech/2022/02/21/%E5%B8%B8%E7%94%A8JVM%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lilongsheng.tech/2022/02/21/%E5%B8%B8%E7%94%A8JVM%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/","path":"2022/02/21/常用JVM分析工具/","title":"常用JVM分析工具"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>常用JVM分析工具 | creasylai19</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?4fc17476ed9fd520878a85e8e8a240aa"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <img class="custom-logo-image" src="/images/custom-logo.png" alt="creasylai19">
+      <i class="logo-line"></i>
+    </a>
+    
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/me" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">命令行工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jps"><span class="nav-number">1.1.</span> <span class="nav-text">jps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstat"><span class="nav-number">1.2.</span> <span class="nav-text">jstat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinfo"><span class="nav-number">1.3.</span> <span class="nav-text">jinfo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jmap"><span class="nav-number">1.4.</span> <span class="nav-text">jmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jhat"><span class="nav-number">1.5.</span> <span class="nav-text">jhat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack"><span class="nav-number">1.6.</span> <span class="nav-text">jstack</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">可视化工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jconsole"><span class="nav-number">2.1.</span> <span class="nav-text">jconsole</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-VM"><span class="nav-number">2.2.</span> <span class="nav-text">Visual VM</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="creasylai19"
+      src="https://img2.doubanio.com/icon/ul106293348-12.jpg">
+  <p class="site-author-name" itemprop="name">creasylai19</p>
+  <div class="site-description" itemprop="description">Stay hungry, stay foolish.</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/creasylai19" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;creasylai19" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:creasylai19@gmail.com" title="E-Mail → mailto:creasylai19@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.douban.com/people/creasylai19" title="豆瓣 → https:&#x2F;&#x2F;www.douban.com&#x2F;people&#x2F;creasylai19" rel="noopener" target="_blank">豆瓣</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/creasy_lai19" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;creasy_lai19" rel="noopener" target="_blank">知乎</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.joelonsoftware.com/" title="https:&#x2F;&#x2F;www.joelonsoftware.com&#x2F;" rel="noopener" target="_blank">Joel Spolsky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://engineering.fb.com/" title="https:&#x2F;&#x2F;engineering.fb.com&#x2F;" rel="noopener" target="_blank">Meta engineering</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://developer.ibm.com/" title="https:&#x2F;&#x2F;developer.ibm.com&#x2F;" rel="noopener" target="_blank">IBM Developer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://tutorials.jenkov.com/" title="http:&#x2F;&#x2F;tutorials.jenkov.com&#x2F;" rel="noopener" target="_blank">jenkov.com</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https:&#x2F;&#x2F;tech.meituan.com&#x2F;" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://mindhacks.cn/" title="http:&#x2F;&#x2F;mindhacks.cn&#x2F;" rel="noopener" target="_blank">刘未鹏</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2022/02/21/%E5%B8%B8%E7%94%A8JVM%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://img2.doubanio.com/icon/ul106293348-12.jpg">
+      <meta itemprop="name" content="creasylai19">
+      <meta itemprop="description" content="Stay hungry, stay foolish.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="creasylai19">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          常用JVM分析工具
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-02-21 23:47:56 / 修改时间：23:53:17" itemprop="dateCreated datePublished" datetime="2022-02-21T23:47:56+08:00">2022-02-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>12k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>11 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>这篇文章是2020年在CSDN发表的，因为最近要使用其中工具，所以做文章迁移</p>
+</blockquote>
+<p>以下工具是基于JDK11.0.5版本</p>
+<h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>Java虚拟机进程状态工具</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">jps [options] [hostid]</span><br><span class="line">  -q 显示进程ID</span><br><span class="line">  -m 显示进程ID、主类名、传入主方法的参数</span><br><span class="line">  -l 显示进程ID、全类名</span><br><span class="line">  -v 显示进程ID、主类名、虚拟机参数</span><br><span class="line">  -V 显示进程ID、主类名【默认】</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h3 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h3><p>Java虚拟机统计监控工具</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">jstat [ generalOption | outputOptions vmid [ interval [ s|ms ] [ count ] ] ]</span><br><span class="line">  -generalOption通用信息，可传入-help(显示帮助信息) -version(显示版本信息[测试过，无效]) -options(显示可用的统计选项)</span><br><span class="line">  -outputOptions一个或者多个输出选项，常用的如</span><br><span class="line">  		-<span class="class"><span class="keyword">class</span> 类加载的统计信息</span></span><br><span class="line"><span class="class">  		-<span class="title">complier</span> 即时编译器统计信息</span></span><br><span class="line"><span class="class">  		-<span class="title">gc</span> 垃圾收集器统计</span></span><br><span class="line"><span class="class">  -<span class="title">vmid</span> 本地虚拟机进程的话，则为对应进程<span class="title">ID</span>(可通过<span class="title">jps</span>查进程<span class="title">ID</span>)。另外，也可以查看远程虚拟机进程</span></span><br><span class="line"><span class="class">  -<span class="title">interval</span> 统计的时间间隔，默认为微秒</span></span><br><span class="line"><span class="class">  -<span class="title">count</span> 总共统计次数</span></span><br></pre></td></tr></table></figure>
+
+<p>案例</p>
+<p><em>~ jstat -class 1251</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jstat -<span class="class"><span class="keyword">class</span> 1251</span></span><br><span class="line"><span class="class">加载的类 加载类的总大小   卸载的类     卸载类的总大小		 类加载和卸载总花费时间</span></span><br><span class="line"><span class="class"><span class="title">Loaded</span>  <span class="title">Bytes</span>  				<span class="title">Unloaded</span>  	<span class="title">Bytes</span>     			<span class="title">Time</span>   </span></span><br><span class="line"><span class="class">  4426  8085.9      	182   			214.5       		5.79</span></span><br></pre></td></tr></table></figure>
+
+<p><em>~ jstat -gc 1251</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jstat -gc <span class="number">1251</span></span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line"> <span class="number">0.0</span>    <span class="number">0.0</span>    <span class="number">0.0</span>    <span class="number">0.0</span>   <span class="number">11264.0</span>   <span class="number">2048.0</span>   <span class="number">16384.0</span>     <span class="number">7254.0</span>   <span class="number">27440.0</span> <span class="number">26286.1</span> <span class="number">3200.0</span> <span class="number">2789.7</span>      <span class="number">7</span>    <span class="number">0.072</span>  <span class="number">13</span>      <span class="number">0.360</span>    <span class="number">0.433</span></span><br><span class="line"> </span><br><span class="line"> 各列含义：</span><br><span class="line">|SOC    | 幸存区<span class="number">0</span>大小(KB)|</span><br><span class="line">|S1C    | 幸存区<span class="number">1</span>大小(KB)|</span><br><span class="line">|S0U    | 幸存区<span class="number">0</span>使用大小(KB)|</span><br><span class="line">|S1U    | 幸存区<span class="number">1</span>使用大小(KB)|</span><br><span class="line">|EC     | eden区空间大小(KB)|</span><br><span class="line">|EU     | eden区空间使用大小(KB)|</span><br><span class="line">|OC     | 老年代大小(KB)|</span><br><span class="line">|OU     | 老年代使用大小(KB)|</span><br><span class="line">|MC     | 元空间大小(KB)-<span class="number">1.8</span>版本之后，用于存放方法区数据|</span><br><span class="line">|MU     | 元空间使用大小(KB)|</span><br><span class="line">|CCSC   | 压缩类空间大小(KB)|</span><br><span class="line">|CCSU   | 压缩类空间使用大小(KB)|</span><br><span class="line">|PC     | 永久区大小(KB)|</span><br><span class="line">|PU     | 永久区使用大小(KB)|</span><br><span class="line">|YGC    | 发生young GC次数|</span><br><span class="line">|YGCT   | young GC所使用时间|</span><br><span class="line">|FGC    | 发生full GC次数|</span><br><span class="line">|FGCT   | full GC所使用时间|</span><br><span class="line">|GCT    | 总共垃圾回收时间|</span><br></pre></td></tr></table></figure>
+
+<p><em>~ jstat -gcutil 1251</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jstat -gcutil <span class="number">1251</span></span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">  <span class="number">0.00</span>   <span class="number">0.00</span>  <span class="number">27.27</span>  <span class="number">44.27</span>  <span class="number">95.79</span>  <span class="number">87.18</span>      <span class="number">7</span>    <span class="number">0.072</span>    <span class="number">13</span>    <span class="number">0.360</span>    <span class="number">0.433</span></span><br><span class="line">  </span><br><span class="line"> 各列含义：</span><br><span class="line">|S0     | 幸存区<span class="number">0</span>使用百分比|</span><br><span class="line">|S1     | 幸存区<span class="number">1</span>使用百分比|</span><br><span class="line">|E      | eden区使用百分比|</span><br><span class="line">|O      | 老年代使用百分比|</span><br><span class="line">|M      | 元空间使用百分比|</span><br><span class="line">|CCS    | 压缩类空间使用百分比|</span><br><span class="line">|YGC    | 发生young GC次数|</span><br><span class="line">|YGCT   | young GC所使用时间|</span><br><span class="line">|FGC    | 发生full GC次数|</span><br><span class="line">|FGCT   | full GC所使用时间|</span><br><span class="line">|GCT    | 总共垃圾回收时间|</span><br></pre></td></tr></table></figure>
+
+<h3 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h3><p>打印配置信息【重点其实是可以动态设置虚拟机参数】</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jinfo [ option ] pid</span><br><span class="line">  -flags 可以动态的设置或者取消或者变更JVM参数</span><br><span class="line">  默认输出系统属性、JVM信息(官方目前推荐用jcmd替代jinfo，以减少影响当前进程性能)</span><br></pre></td></tr></table></figure>
+
+<p>案例</p>
+<p><em>jinfo 6564(这个命令jdk1.8报各种错，暂未解决)</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jinfo <span class="number">6564</span></span><br><span class="line">Java System Properties:</span><br><span class="line">#Mon Mar <span class="number">23</span> <span class="number">23</span>:<span class="number">47</span>:<span class="number">56</span> CST <span class="number">2020</span></span><br><span class="line">gopherProxySet=<span class="keyword">false</span></span><br><span class="line">socksProxyHost=<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">awt.toolkit=sun.lwawt.macosx.LWCToolkit</span><br><span class="line">http.proxyHost=<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">java.specification.version=<span class="number">11</span></span><br><span class="line">sun.cpu.isalist=</span><br><span class="line">sun.jnu.encoding=UTF-<span class="number">8</span></span><br><span class="line">java.class.path=/Users/laicreasy/github/peach/classical/target/test-classes\:/Users/laicreasy/github/peach/classical/target/classes\:/Users/laicreasy/.m2/repository/junit/junit/<span class="number">4.13</span>/junit-<span class="number">4.13</span>.jar\:/Users/laicreasy/.m2/repository/org/hamcrest/hamcrest-core/<span class="number">1.3</span>/hamcrest-core-<span class="number">1.3</span>.jar\:/Users/laicreasy/.m2/repository/org/apache/logging/log4j/log4j-api/<span class="number">2.13</span><span class="number">.1</span>/log4j-api-<span class="number">2.13</span><span class="number">.1</span>.jar\:/Users/laicreasy/.m2/repository/org/apache/logging/log4j/log4j-core/<span class="number">2.13</span><span class="number">.1</span>/log4j-core-<span class="number">2.13</span><span class="number">.1</span>.jar</span><br><span class="line">https.proxyPort=<span class="number">8001</span></span><br><span class="line">java.vm.vendor=Oracle Corporation</span><br><span class="line">sun.arch.data.model=<span class="number">64</span></span><br><span class="line">java.vendor.url=http\:<span class="comment">//java.oracle.com/</span></span><br><span class="line">user.timezone=Asia/Shanghai</span><br><span class="line">java.vm.specification.version=<span class="number">11</span></span><br><span class="line">os.name=Mac OS X</span><br><span class="line">sun.java.launcher=SUN_STANDARD</span><br><span class="line">user.country=CN</span><br><span class="line">sun.boot.library.path=/Library/Java/JavaVirtualMachines/jdk-<span class="number">11.0</span><span class="number">.5</span>.jdk/Contents/Home/lib</span><br><span class="line">sun.java.command=com.creasy.Concurrency</span><br><span class="line">jdk.debug=release</span><br><span class="line">sun.cpu.endian=little</span><br><span class="line">user.home=/Users/laicreasy</span><br><span class="line">user.language=en</span><br><span class="line">java.specification.vendor=Oracle Corporation</span><br><span class="line">java.version.date=<span class="number">2019</span>-<span class="number">10</span>-<span class="number">15</span></span><br><span class="line">java.home=/Library/Java/JavaVirtualMachines/jdk-<span class="number">11.0</span><span class="number">.5</span>.jdk/Contents/Home</span><br><span class="line">file.separator=/</span><br><span class="line">https.proxyHost=<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">java.vm.compressedOopsMode=Zero based</span><br><span class="line">line.separator=\n</span><br><span class="line">java.specification.name=Java Platform API Specification</span><br><span class="line">java.vm.specification.vendor=Oracle Corporation</span><br><span class="line">java.awt.graphicsenv=sun.awt.CGraphicsEnvironment</span><br><span class="line">sun.management.compiler=HotSpot <span class="number">64</span>-Bit Tiered Compilers</span><br><span class="line">java.runtime.version=<span class="number">11.0</span><span class="number">.5</span>+<span class="number">10</span>-LTS</span><br><span class="line">user.name=laicreasy</span><br><span class="line">path.separator=\:</span><br><span class="line">os.version=<span class="number">10.15</span><span class="number">.2</span></span><br><span class="line">java.runtime.name=Java(TM) SE Runtime Environment</span><br><span class="line">file.encoding=UTF-<span class="number">8</span></span><br><span class="line">java.vm.name=<span class="function">Java <span class="title">HotSpot</span><span class="params">(TM)</span> 64-Bit Server VM</span></span><br><span class="line"><span class="function">java.vendor.version</span>=<span class="number">18.9</span></span><br><span class="line">java.vendor.url.bug=http\:<span class="comment">//bugreport.java.com/bugreport/</span></span><br><span class="line">java.io.tmpdir=/<span class="keyword">var</span>/folders/w9/1vphl83x0rz54l_x9p118n5w0000gn/T/</span><br><span class="line">java.version=<span class="number">11.0</span><span class="number">.5</span></span><br><span class="line">user.dir=/Users/laicreasy/github/peach/classical</span><br><span class="line">os.arch=x86_64</span><br><span class="line">socksProxyPort=<span class="number">1081</span></span><br><span class="line">java.vm.specification.name=Java Virtual Machine Specification</span><br><span class="line">java.awt.printerjob=sun.lwawt.macosx.CPrinterJob</span><br><span class="line">sun.os.patch.level=unknown</span><br><span class="line">java.library.path=/Users/laicreasy/Library/Java/Extensions\:/Library/Java/Extensions\:/Network/Library/Java/Extensions\:/System/Library/Java/Extensions\:/usr/lib/java\:.</span><br><span class="line">java.vendor=Oracle Corporation</span><br><span class="line">java.vm.info=mixed mode</span><br><span class="line">java.vm.version=<span class="number">11.0</span><span class="number">.5</span>+<span class="number">10</span>-LTS</span><br><span class="line">sun.io.unicode.encoding=UnicodeBig</span><br><span class="line">java.class.version=<span class="number">55.0</span></span><br><span class="line">http.proxyPort=<span class="number">8001</span></span><br><span class="line"></span><br><span class="line">VM Flags:</span><br><span class="line">-XX:CICompilerCount=<span class="number">3</span> -XX:ConcGCThreads=<span class="number">1</span> -XX:G1ConcRefinementThreads=<span class="number">4</span> -XX:G1HeapRegionSize=<span class="number">1048576</span> -XX:GCDrainStackTargetSize=<span class="number">64</span> -XX:InitialHeapSize=<span class="number">134217728</span> -XX:MarkStackSize=<span class="number">4194304</span> -XX:MaxHeapSize=<span class="number">2147483648</span> -XX:MaxNewSize=<span class="number">1287651328</span> -XX:MinHeapDeltaBytes=<span class="number">1048576</span> -XX:NonNMethodCodeHeapSize=<span class="number">5830732</span> -XX:NonProfiledCodeHeapSize=<span class="number">122913754</span> -XX:ProfiledCodeHeapSize=<span class="number">122913754</span> -XX:ReservedCodeCacheSize=<span class="number">251658240</span> -XX:+SegmentedCodeCache -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseFastUnorderedTimeStamps -XX:+UseG1GC </span><br><span class="line"></span><br><span class="line">VM Arguments:</span><br><span class="line">jvm_args: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=<span class="number">49825</span>:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-<span class="number">8</span> </span><br><span class="line">java_command: com.creasy.<span class="function">Concurrency</span></span><br><span class="line"><span class="function"><span class="title">java_class_path</span> <span class="params">(initial)</span>: /Users/laicreasy/github/peach/classical/target/test-classes:/Users/laicreasy/github/peach/classical/target/classes:/Users/laicreasy/.m2/repository/junit/junit/4.13/junit-4.13.jar:/Users/laicreasy/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/laicreasy/.m2/repository/org/apache/logging/log4j/log4j-api/2.13.1/log4j-api-2.13.1.jar:/Users/laicreasy/.m2/repository/org/apache/logging/log4j/log4j-core/2.13.1/log4j-core-2.13.1.jar</span></span><br><span class="line"><span class="function">Launcher Type: SUN_STANDARD</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>查看堆内存信息，可以生成dump文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">jmap [ option ] pid</span><br><span class="line">常用如</span><br><span class="line">	jmap -heap pid显示堆配置和使用情况</span><br><span class="line">	jmap -clstats &lt;pid&gt;显示类加载器信息</span><br><span class="line">    jmap -finalizerinfo &lt;pid&gt;打印等会finalization的对象信息</span><br><span class="line">    jmap -histo[:live] &lt;pid&gt;堆中对象的统计，如果加上了[:live]，那么只统计当前存活的对象</span><br><span class="line">    jmap -dump:&lt;dump-options&gt; &lt;pid&gt;生成堆转储快照</span><br><span class="line">	    dump-options:</span><br><span class="line">  	    -live        只包括当前存活的对象</span><br><span class="line">    	-format=b     二进制格式</span><br><span class="line">      	-file=&lt;file&gt;  保存的文件名</span><br></pre></td></tr></table></figure>
+
+<p>案例</p>
+<p><em>~ jhsdb jmap –heap –pid 7157(jdk11下，jmap -heap pid无效)</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jhsdb jmap --heap --pid <span class="number">7157</span></span><br><span class="line">Attaching to process ID <span class="number">7157</span>, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is <span class="number">11.0</span><span class="number">.5</span>+<span class="number">10</span>-LTS</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Garbage-First (G1) GC with <span class="number">4</span> thread(s)</span><br><span class="line"></span><br><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         = <span class="number">40</span></span><br><span class="line">   MaxHeapFreeRatio         = <span class="number">70</span></span><br><span class="line">   MaxHeapSize              = <span class="number">2147483648</span> (<span class="number">2048.</span>0MB)</span><br><span class="line">   NewSize                  = <span class="number">1363144</span> (<span class="number">1.</span>2999954223632812MB)</span><br><span class="line">   MaxNewSize               = <span class="number">1287651328</span> (<span class="number">1228.</span>0MB)</span><br><span class="line">   OldSize                  = <span class="number">5452592</span> (<span class="number">5.</span>1999969482421875MB)</span><br><span class="line">   NewRatio                 = <span class="number">2</span></span><br><span class="line">   SurvivorRatio            = <span class="number">8</span></span><br><span class="line">   MetaspaceSize            = <span class="number">21807104</span> (<span class="number">20.</span>796875MB)</span><br><span class="line">   CompressedClassSpaceSize = <span class="number">1073741824</span> (<span class="number">1024.</span>0MB)</span><br><span class="line">   MaxMetaspaceSize         = <span class="number">17592186044415</span> MB</span><br><span class="line">   G1HeapRegionSize         = <span class="number">1048576</span> (<span class="number">1.</span>0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">G1 Heap:</span><br><span class="line">   regions  = <span class="number">2048</span></span><br><span class="line">   capacity = <span class="number">2147483648</span> (<span class="number">2048.</span>0MB)</span><br><span class="line">   used     = <span class="number">3145728</span> (<span class="number">3.</span>0MB)</span><br><span class="line">   free     = <span class="number">2144337920</span> (<span class="number">2045.</span>0MB)</span><br><span class="line">   <span class="number">0.146484375</span>% used</span><br><span class="line">G1 Young Generation:</span><br><span class="line">Eden Space:</span><br><span class="line">   regions  = <span class="number">4</span></span><br><span class="line">   capacity = <span class="number">15728640</span> (<span class="number">15.</span>0MB)</span><br><span class="line">   used     = <span class="number">4194304</span> (<span class="number">4.</span>0MB)</span><br><span class="line">   free     = <span class="number">11534336</span> (<span class="number">11.</span>0MB)</span><br><span class="line">   <span class="number">26.666666666666668</span>% used</span><br><span class="line">Survivor Space:</span><br><span class="line">   regions  = <span class="number">0</span></span><br><span class="line">   capacity = <span class="number">0</span> (<span class="number">0.</span>0MB)</span><br><span class="line">   used     = <span class="number">0</span> (<span class="number">0.</span>0MB)</span><br><span class="line">   free     = <span class="number">0</span> (<span class="number">0.</span>0MB)</span><br><span class="line">   <span class="number">0.0</span>% used</span><br><span class="line">G1 Old Generation:</span><br><span class="line">   regions  = <span class="number">0</span></span><br><span class="line">   capacity = <span class="number">118489088</span> (<span class="number">113.</span>0MB)</span><br><span class="line">   used     = <span class="number">0</span> (<span class="number">0.</span>0MB)</span><br><span class="line">   free     = <span class="number">118489088</span> (<span class="number">113.</span>0MB)</span><br><span class="line">   <span class="number">0.0</span>% used</span><br></pre></td></tr></table></figure>
+
+<p><em>~ jmap -histo:live 7588</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jmap -histo:live <span class="number">7588</span></span><br><span class="line"> num     #instances         #<span class="function">bytes  class <span class="title">name</span> <span class="params">(<span class="keyword">module</span>)</span></span></span><br><span class="line"><span class="function">-------------------------------------------------------</span></span><br><span class="line"><span class="function">   1:          7610         607736  [<span class="title">B</span> <span class="params">(java.base@<span class="number">11.0</span><span class="number">.5</span>)</span></span></span><br><span class="line"><span class="function">   2:          7069         169656  java.lang.<span class="title">String</span> <span class="params">(java.base@<span class="number">11.0</span><span class="number">.5</span>)</span></span></span><br><span class="line"><span class="function">   3:          1201         146592  java.lang.<span class="title">Class</span> <span class="params">(java.base@<span class="number">11.0</span><span class="number">.5</span>)</span></span></span><br><span class="line"><span class="function">   4:          3640         116480  java.util.HashMap$<span class="title">Node</span> <span class="params">(java.base@<span class="number">11.0</span><span class="number">.5</span>)</span></span></span><br><span class="line"><span class="function">   5:          1166          98920  [Ljava.lang.Object</span>; (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">   <span class="number">6</span>:           <span class="number">379</span>          <span class="number">53792</span>  [Ljava.util.HashMap$Node; (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">   <span class="number">7</span>:            <span class="number">12</span>          <span class="number">50104</span>  [C (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">   <span class="number">8</span>:           <span class="number">332</span>          <span class="number">41120</span>  [I (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">   <span class="number">9</span>:          <span class="number">1232</span>          <span class="number">39424</span>  java.util.concurrent.ConcurrentHashMap$Node (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">  <span class="number">10</span>:           <span class="number">645</span>          <span class="number">25800</span>  java.util.LinkedHashMap$Entry (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">  <span class="number">11</span>:           <span class="number">392</span>          <span class="number">18816</span>  java.util.HashMap (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">  <span class="number">12</span>:            <span class="number">46</span>          <span class="number">17440</span>  [Ljava.util.concurrent.ConcurrentHashMap$Node; (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">  <span class="number">13</span>:           <span class="number">289</span>          <span class="number">13792</span>  [Ljava.lang.String; (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">...</span><br><span class="line"> <span class="number">511</span>:             <span class="number">1</span>             <span class="number">16</span>  sun.nio.fs.NativeBuffers$<span class="number">1</span> (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line"> <span class="number">512</span>:             <span class="number">1</span>             <span class="number">16</span>  sun.util.calendar.Gregorian (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line"> <span class="number">513</span>:             <span class="number">1</span>             <span class="number">16</span>  sun.util.cldr.CLDRBaseLocaleDataMetaInfo (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line"> <span class="number">514</span>:             <span class="number">1</span>             <span class="number">16</span>  sun.util.locale.InternalLocaleBuilder$CaseInsensitiveChar (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line"> <span class="number">515</span>:             <span class="number">1</span>             <span class="number">16</span>  sun.util.locale.provider.TimeZoneNameUtility$TimeZoneNameGetter (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line"> <span class="number">516</span>:             <span class="number">1</span>             <span class="number">16</span>  sun.util.resources.LocaleData$LocaleDataStrategy (java.base@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line"> <span class="number">517</span>:             <span class="number">1</span>             <span class="number">16</span>  sun.util.resources.cldr.provider.CLDRLocaleDataMetaInfo (jdk.localedata@<span class="number">11.0</span><span class="number">.5</span>)</span><br><span class="line">Total         <span class="number">30567</span>        <span class="number">1623664</span></span><br></pre></td></tr></table></figure>
+
+<p><em>~ jmap -dump:live,format=b,file=heap.bin 7588</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jmap -dump:live,format=b,file=heap.bin <span class="number">7588</span> </span><br><span class="line">Heap dump file created</span><br></pre></td></tr></table></figure>
+
+<h3 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h3><p>java堆分析工具，上述dump文件可以通过这个工具进行分析。这个工具会启动一个小型http服务器，可以通过浏览器查看分析结果。JDK11已经去掉了这个工具，直接用visual vm可视化工具分析</p>
+<p>案例</p>
+<p><em>jhat heap.bin</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jhat heap.bin</span><br><span class="line">Reading from heap.bin...</span><br><span class="line">Dump file created Tue Mar <span class="number">24</span> <span class="number">02</span>:<span class="number">06</span>:<span class="number">41</span> CST <span class="number">2020</span></span><br><span class="line">Snapshot read, resolving...</span><br><span class="line">Resolving <span class="number">30513</span> objects...</span><br><span class="line">Chasing references, expect <span class="number">6</span> dots......</span><br><span class="line">Eliminating duplicate references......</span><br><span class="line">Snapshot resolved.</span><br><span class="line">Started HTTP server on port <span class="number">7000</span></span><br><span class="line">Server is ready.</span><br></pre></td></tr></table></figure>
+
+<p>打开浏览器，<a target="_blank" rel="noopener" href="http://localhost:7000/">http://localhost:7000/</a> 即可看到分析信息</p>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>打印线程栈信息，如可用来分析死循环、死锁等</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jstack [ option ] pid</span><br><span class="line">	-m 打印Java和C++栈信息</span><br><span class="line">	-l 额外打印关于锁的信息</span><br></pre></td></tr></table></figure>
+
+<p>案例</p>
+<p><em>jstack -l 7588</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jstack -l <span class="number">7588</span></span><br><span class="line"><span class="number">2020</span>-<span class="number">03</span>-<span class="number">24</span> <span class="number">02</span>:<span class="number">38</span>:<span class="number">42</span></span><br><span class="line"><span class="function">Full thread dump Java <span class="title">HotSpot</span><span class="params">(TM)</span> 64-Bit Server <span class="title">VM</span> <span class="params">(<span class="number">11.0</span><span class="number">.5</span>+<span class="number">10</span>-LTS mixed mode)</span>:</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">Threads class SMR info:</span></span><br><span class="line"><span class="function">_java_thread_list</span>=<span class="number">0x00007fb213e2d690</span>, length=<span class="number">11</span>, elements=&#123;</span><br><span class="line"><span class="number">0x00007fb215805800</span>, <span class="number">0x00007fb21404a800</span>, <span class="number">0x00007fb21483a000</span>, <span class="number">0x00007fb21404f000</span>,</span><br><span class="line"><span class="number">0x00007fb21501d800</span>, <span class="number">0x00007fb214064000</span>, <span class="number">0x00007fb215018000</span>, <span class="number">0x00007fb2140d3000</span>,</span><br><span class="line"><span class="number">0x00007fb214943000</span>, <span class="number">0x00007fb214810000</span>, <span class="number">0x00007fb214150800</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;main&quot;</span> #<span class="number">1</span> prio=<span class="number">5</span> os_prio=<span class="number">31</span> cpu=<span class="number">314.</span>71ms elapsed=<span class="number">2576.</span>00s tid=<span class="number">0x00007fb215805800</span> nid=<span class="number">0x2703</span> runnable  [<span class="number">0x000070000439c000</span>]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line">	at java.io.FileInputStream.readBytes(java.base@<span class="number">11.0</span><span class="number">.5</span>/Native Method)</span><br><span class="line">	at java.io.FileInputStream.read(java.base@<span class="number">11.0</span><span class="number">.5</span>/FileInputStream.java:<span class="number">279</span>)</span><br><span class="line">	at java.io.BufferedInputStream.fill(java.base@<span class="number">11.0</span><span class="number">.5</span>/BufferedInputStream.java:<span class="number">252</span>)</span><br><span class="line">	at java.io.BufferedInputStream.read(java.base@<span class="number">11.0</span><span class="number">.5</span>/BufferedInputStream.java:<span class="number">271</span>)</span><br><span class="line">	- locked &lt;<span class="number">0x00000007801261e8</span>&gt; (a java.io.BufferedInputStream)</span><br><span class="line">	at com.creasy.Concurrency.main(Concurrency.java:<span class="number">24</span>)</span><br><span class="line"></span><br><span class="line">   Locked ownable synchronizers:</span><br><span class="line">	- None</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;Reference Handler&quot;</span> #<span class="number">2</span> daemon prio=<span class="number">10</span> os_prio=<span class="number">31</span> cpu=<span class="number">0.</span>36ms elapsed=<span class="number">2575.</span>95s tid=<span class="number">0x00007fb21404a800</span> nid=<span class="number">0x3403</span> waiting on condition  [<span class="number">0x0000700004ab1000</span>]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line">	at java.lang.ref.Reference.waitForReferencePendingList(java.base@<span class="number">11.0</span><span class="number">.5</span>/Native Method)</span><br><span class="line">	at java.lang.ref.Reference.processPendingReferences(java.base@<span class="number">11.0</span><span class="number">.5</span>/Reference.java:<span class="number">241</span>)</span><br><span class="line">	at java.lang.ref.Reference$ReferenceHandler.run(java.base@<span class="number">11.0</span><span class="number">.5</span>/Reference.java:<span class="number">213</span>)</span><br><span class="line"></span><br><span class="line">   Locked ownable synchronizers:</span><br><span class="line">	- None</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;Finalizer&quot;</span> #<span class="number">3</span> daemon prio=<span class="number">8</span> os_prio=<span class="number">31</span> cpu=<span class="number">0.</span>46ms elapsed=<span class="number">2575.</span>95s tid=<span class="number">0x00007fb21483a000</span> nid=<span class="number">0x4903</span> in Object.wait()  [<span class="number">0x0000700004bb4000</span>]</span><br><span class="line">   java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">	at java.lang.Object.wait(java.base@<span class="number">11.0</span><span class="number">.5</span>/Native Method)</span><br><span class="line">	- waiting on &lt;<span class="number">0x00000007801218f8</span>&gt; (a java.lang.ref.ReferenceQueue$Lock)</span><br><span class="line">	at java.lang.ref.ReferenceQueue.remove(java.base@<span class="number">11.0</span><span class="number">.5</span>/ReferenceQueue.java:<span class="number">155</span>)</span><br><span class="line">	- waiting to re-<span class="function">lock in <span class="title">wait</span><span class="params">()</span> &lt;0x00000007801218f8&gt; <span class="params">(a java.lang.ref.ReferenceQueue$Lock)</span></span></span><br><span class="line"><span class="function">	at java.lang.ref.ReferenceQueue.<span class="title">remove</span><span class="params">(java.base@<span class="number">11.0</span><span class="number">.5</span>/ReferenceQueue.java:<span class="number">176</span>)</span></span></span><br><span class="line"><span class="function">	at java.lang.ref.Finalizer$FinalizerThread.<span class="title">run</span><span class="params">(java.base@<span class="number">11.0</span><span class="number">.5</span>/Finalizer.java:<span class="number">170</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">   Locked ownable synchronizers:</span></span><br><span class="line"><span class="function">	- None</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">...</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">&quot;VM Thread&quot; os_prio</span>=<span class="number">31</span> cpu=<span class="number">150.</span>43ms elapsed=<span class="number">2575.</span>96s tid=<span class="number">0x00007fb214002800</span> nid=<span class="number">0x4d03</span> runnable  </span><br><span class="line"></span><br><span class="line"><span class="string">&quot;GC Thread#0&quot;</span> os_prio=<span class="number">31</span> cpu=<span class="number">12.</span>00ms elapsed=<span class="number">2575.</span>99s tid=<span class="number">0x00007fb215005000</span> nid=<span class="number">0x2d03</span> runnable  </span><br><span class="line"></span><br><span class="line"><span class="string">&quot;GC Thread#1&quot;</span> os_prio=<span class="number">31</span> cpu=<span class="number">6.</span>44ms elapsed=<span class="number">2425.</span>77s tid=<span class="number">0x00007fb215896000</span> nid=<span class="number">0x4207</span> runnable  </span><br><span class="line"></span><br><span class="line"><span class="string">&quot;GC Thread#2&quot;</span> os_prio=<span class="number">31</span> cpu=<span class="number">8.</span>37ms elapsed=<span class="number">2425.</span>77s tid=<span class="number">0x00007fb214075000</span> nid=<span class="number">0x5f03</span> runnable  </span><br><span class="line"></span><br><span class="line"><span class="string">&quot;G1 Main Marker&quot;</span> os_prio=<span class="number">31</span> cpu=<span class="number">0.</span>91ms elapsed=<span class="number">2575.</span>99s tid=<span class="number">0x00007fb214022800</span> nid=<span class="number">0x5203</span> runnable  </span><br><span class="line"></span><br><span class="line"><span class="string">&quot;G1 Conc#0&quot;</span> os_prio=<span class="number">31</span> cpu=<span class="number">0.</span>04ms elapsed=<span class="number">2575.</span>99s tid=<span class="number">0x00007fb215005800</span> nid=<span class="number">0x5003</span> runnable  </span><br><span class="line"></span><br><span class="line"><span class="string">&quot;G1 Refine#0&quot;</span> os_prio=<span class="number">31</span> cpu=<span class="number">0.</span>71ms elapsed=<span class="number">2575.</span>99s tid=<span class="number">0x00007fb215836800</span> nid=<span class="number">0x3103</span> runnable  </span><br><span class="line"></span><br><span class="line"><span class="string">&quot;G1 Young RemSet Sampling&quot;</span> os_prio=<span class="number">31</span> cpu=<span class="number">386.</span>00ms elapsed=<span class="number">2575.</span>99s tid=<span class="number">0x00007fb214041800</span> nid=<span class="number">0x3203</span> runnable  </span><br><span class="line"><span class="string">&quot;VM Periodic Task Thread&quot;</span> os_prio=<span class="number">31</span> cpu=<span class="number">2000.</span>79ms elapsed=<span class="number">2575.</span>55s tid=<span class="number">0x00007fb214149800</span> nid=<span class="number">0x5b03</span> waiting on condition  </span><br><span class="line"></span><br><span class="line">JNI global refs: <span class="number">18</span>, weak refs: <span class="number">0</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="可视化工具"><a href="#可视化工具" class="headerlink" title="可视化工具"></a>可视化工具</h2><h3 id="jconsole"><a href="#jconsole" class="headerlink" title="jconsole"></a>jconsole</h3><p>可以监控CPU、内存、线程等情况</p>
+<p><em>~jconsole</em></p>
+<p><img src="https://img-blog.csdnimg.cn/20200324033931992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NyZWFzeWxhaTE5,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="Visual-VM"><a href="#Visual-VM" class="headerlink" title="Visual VM"></a>Visual VM</h3><p>Visual VM是一款All-in-One的Java分析工具，堆栈信息、线程信息等都可以分析，而且还支持装插件。但jdk1.9之后默认JDK不再支持，可以通过<a target="_blank" rel="noopener" href="https://visualvm.github.io/download.html">https://visualvm.github.io/download.html</a>这里下载</p>
+<p>在1.8环境下执行</p>
+<p><em>~ jvisualvm</em></p>
+<p><img src="https://img-blog.csdnimg.cn/20200324033956836.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NyZWFzeWxhaTE5,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>reference：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jps.html">https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jps.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html">https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/11/troubleshoot/diagnostic-tools.html#GUID-CBC97A20-7379-4762-BA17-FB1A560D02E4">https://docs.oracle.com/en/java/javase/11/troubleshoot/diagnostic-tools.html#GUID-CBC97A20-7379-4762-BA17-FB1A560D02E4</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/09/06/十分钟学习一个日常定位bug技巧之Arthas工具/" rel="bookmark">十分钟学习一个日常定位bug技巧之Arthas工具</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/11/23/LeetCode36/" rel="bookmark">LeetCode36-有效的数独</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/11/24/LeetCode423/" rel="bookmark">LeetCode423-从英文中重建数字</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/12/01/LeetCode38-外观数列/" rel="bookmark">LeetCode38-外观数列</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/12/13/LeetCode807-保持城市天际线/" rel="bookmark">LeetCode807-保持城市天际线</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer"><div class="wechat_OA">
+  <span style="text-align: center;display: block;color: #ccc;">------欢迎关注我的公众号------</span>
+  <br/>
+    <!-- 这里添加你的二维码图片 -->
+  <img src ="/images/SubscriptionCode2.jpeg" style="width:18%;height:18%;" />
+  <br/>
+</div>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>creasylai19
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://lilongsheng.tech/2022/02/21/%E5%B8%B8%E7%94%A8JVM%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/" title="常用JVM分析工具">https://lilongsheng.tech/2022/02/21/常用JVM分析工具/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Bug/" rel="tag"># Bug</a>
+              <a href="/tags/JVM/" rel="tag"># JVM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/17/LeetCode224-%E5%9F%BA%E6%9C%AC%E8%AE%A1%E7%AE%97%E5%99%A8/" rel="prev" title="LeetCode224-基本计算器">
+                  <i class="fa fa-chevron-left"></i> LeetCode224-基本计算器
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">creasylai19</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">30k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">28 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"creasylai19/blog.comment","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

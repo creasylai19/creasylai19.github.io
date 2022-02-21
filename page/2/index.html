@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -244,6 +244,118 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://img2.doubanio.com/icon/ul106293348-12.jpg">
+      <meta itemprop="name" content="creasylai19">
+      <meta itemprop="description" content="Stay hungry, stay foolish.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="creasylai19">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">十分钟学习一个日常定位bug技巧之Arthas工具</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-06 23:20:30" itemprop="dateCreated datePublished" datetime="2021-09-06T23:20:30+08:00">2021-09-06</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-09-11 01:19:12" itemprop="dateModified" datetime="2021-09-11T01:19:12+08:00">2021-09-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote class="blockquote-center-cus">
+<div style="text-align:center;">你独处的能力，决定了你的人生高度</div><div style="text-align:center">你定位BUG的能力，决定了你的薪资高度</div><div style="text-align:right;padding-right:20px;">-收录于《胡说八道全集》    </div>
+</blockquote>
+
+
+<p>平常编码工作中，我们会常遇到如下场景：本地运行没问题，但测试环境就是运行异常，棘手的是，看日志一切都是正常的。</p>
+<p>遇到这种情况，常见的做法是到测试环境把class文件拉回本地反编译，比对测试环境代码是否部署有问题。</p>
+<p>如果代码没问题，则添加打印参数的日志，再重新部署，再复现。这种方法可以解决问题，但一系列的操作，还是太费时间。</p>
+<p>这里介绍一个工具<code>Arthas</code>，它可以直接在运行中的服务把JVM中的class字节码反编译，修改反编译后的代码，再直接重新发布到JVM中，整个过程，不用重启服务。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/09/06/%E5%8D%81%E5%88%86%E9%92%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E6%97%A5%E5%B8%B8%E5%AE%9A%E4%BD%8Dbug%E6%8A%80%E5%B7%A7%E4%B9%8BArthas%E5%B7%A5%E5%85%B7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -365,14 +477,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">18k</span>
+    <span title="站点总字数">30k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">16 分钟</span>
+    <span title="站点阅读时长">28 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
