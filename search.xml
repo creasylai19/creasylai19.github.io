@@ -825,6 +825,9 @@
 <p>因为count默认绑定了compile生命周期，所以这里至配置了插件的goal</p>
 <p>执行<code>mvn clean compile</code>，如下，插件输出了每个资源目录下所有文件的内容行数</p>
 <p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2022/07/article01/02.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2022/07/article01/02.png"></p>
+<p>参考文档：</p>
+<p><a href="https://maven.apache.org/guides/plugin/guide-java-plugin-development.html">https://maven.apache.org/guides/plugin/guide-java-plugin-development.html</a></p>
+<p><a href="https://maven.apache.org/pom.html">https://maven.apache.org/pom.html</a></p>
 ]]></content>
       <categories>
         <category>Maven</category>
