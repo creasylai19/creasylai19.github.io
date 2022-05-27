@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNoto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lilongsheng.tech","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="因为最近在验证binlog相关功能，所以想修改log-bin参数以启用该功能，所以需要修改配置文件。以下是踩坑之后总结出的过程 配置文件的路径查看官方文档后，知道下述方式均可修改启动配置文件，顺序是从上往下读，后面的会覆盖前面的    File Name Purpose    &#x2F;etc&#x2F;my.cnf Global options   &#x2F;etc&#x2F;mysql&#x2F;my.cnf Global options">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac修改MySQL配置文件">
+<meta property="og:url" content="https://lilongsheng.tech/2022/05/28/Mac%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:site_name" content="creasylai19">
+<meta property="og:description" content="因为最近在验证binlog相关功能，所以想修改log-bin参数以启用该功能，所以需要修改配置文件。以下是踩坑之后总结出的过程 配置文件的路径查看官方文档后，知道下述方式均可修改启动配置文件，顺序是从上往下读，后面的会覆盖前面的    File Name Purpose    &#x2F;etc&#x2F;my.cnf Global options   &#x2F;etc&#x2F;mysql&#x2F;my.cnf Global options">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2022/05/article01/01.png">
+<meta property="article:published_time" content="2022-05-27T19:22:55.000Z">
+<meta property="article:modified_time" content="2022-05-27T19:26:27.133Z">
+<meta property="article:author" content="creasylai19">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="Mac">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/creasylai19/blog.images/raw/master/img/2022/05/article01/01.png">
+
+
+<link rel="canonical" href="https://lilongsheng.tech/2022/05/28/Mac%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lilongsheng.tech/2022/05/28/Mac%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/","path":"2022/05/28/Mac修改MySQL配置文件/","title":"Mac修改MySQL配置文件"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Mac修改MySQL配置文件 | creasylai19</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?4fc17476ed9fd520878a85e8e8a240aa"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <img class="custom-logo-image" src="/images/custom-logo.png" alt="creasylai19">
+      <i class="logo-line"></i>
+    </a>
+    
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/me" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84"><span class="nav-number">1.</span> <span class="nav-text">配置文件的路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B9%B6%E4%BF%AE%E6%94%B9%E6%9D%83%E9%99%90"><span class="nav-number">2.</span> <span class="nav-text">生成配置文件并修改权限</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">创建文件夹及文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">其他问题：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="creasylai19"
+      src="https://img2.doubanio.com/icon/ul106293348-12.jpg">
+  <p class="site-author-name" itemprop="name">creasylai19</p>
+  <div class="site-description" itemprop="description">Stay hungry, stay foolish.</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/creasylai19" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;creasylai19" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:creasylai19@gmail.com" title="E-Mail → mailto:creasylai19@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.douban.com/people/creasylai19" title="豆瓣 → https:&#x2F;&#x2F;www.douban.com&#x2F;people&#x2F;creasylai19" rel="noopener" target="_blank">豆瓣</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/creasy_lai19" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;creasy_lai19" rel="noopener" target="_blank">知乎</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.joelonsoftware.com/" title="https:&#x2F;&#x2F;www.joelonsoftware.com&#x2F;" rel="noopener" target="_blank">Joel Spolsky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://engineering.fb.com/" title="https:&#x2F;&#x2F;engineering.fb.com&#x2F;" rel="noopener" target="_blank">Meta engineering</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://developer.ibm.com/" title="https:&#x2F;&#x2F;developer.ibm.com&#x2F;" rel="noopener" target="_blank">IBM Developer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://tutorials.jenkov.com/" title="http:&#x2F;&#x2F;tutorials.jenkov.com&#x2F;" rel="noopener" target="_blank">jenkov.com</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https:&#x2F;&#x2F;tech.meituan.com&#x2F;" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://mindhacks.cn/" title="http:&#x2F;&#x2F;mindhacks.cn&#x2F;" rel="noopener" target="_blank">刘未鹏</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lilongsheng.tech/2022/05/28/Mac%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://img2.doubanio.com/icon/ul106293348-12.jpg">
+      <meta itemprop="name" content="creasylai19">
+      <meta itemprop="description" content="Stay hungry, stay foolish.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="creasylai19">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mac修改MySQL配置文件
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-05-28 03:22:55 / 修改时间：03:26:27" itemprop="dateCreated datePublished" datetime="2022-05-28T03:22:55+08:00">2022-05-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>因为最近在验证binlog相关功能，所以想修改log-bin参数以启用该功能，所以需要修改配置文件。以下是踩坑之后总结出的过程</p>
+<h5 id="配置文件的路径"><a href="#配置文件的路径" class="headerlink" title="配置文件的路径"></a>配置文件的路径</h5><p>查看<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/option-files.html">官方文档</a>后，知道下述方式均可修改启动配置文件，顺序是从上往下读，后面的会覆盖前面的</p>
+<table>
+<thead>
+<tr>
+<th align="left">File Name</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>/etc/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>/etc/mysql/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>*</code>SYSCONFDIR<code>*/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>$MYSQL_HOME/my.cnf</code></td>
+<td align="left">Server-specific options (server only)</td>
+</tr>
+<tr>
+<td align="left"><code>defaults-extra-file</code></td>
+<td align="left">The file specified with <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/option-file-options.html#option_general_defaults-extra-file"><code>--defaults-extra-file</code></a>, if any</td>
+</tr>
+<tr>
+<td align="left"><code>~/.my.cnf</code></td>
+<td align="left">User-specific options</td>
+</tr>
+<tr>
+<td align="left"><code>~/.mylogin.cnf</code></td>
+<td align="left">User-specific login path options (clients only)</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+
+<p>但通过命令<code>mysqld --verbose --helpd</code>的输出参数知道，我的电脑及MySQL版本实际支持下方描述的方式配置</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Default options are read from the following files in the given order:</span><br><span class="line">/etc/my.cnf /etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf ~/.my.cnf </span><br></pre></td></tr></table></figure>
+
+<h5 id="生成配置文件并修改权限"><a href="#生成配置文件并修改权限" class="headerlink" title="生成配置文件并修改权限"></a>生成配置文件并修改权限</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc</span><br><span class="line">touch my.cnf</span><br><span class="line"><span class="comment">#把文件所有者修改为_mysql</span></span><br><span class="line">sudo chown _mysql my.cnf</span><br><span class="line"><span class="comment">#把文件权限修改为644。如果权限是777，MySQL会忽略这个配置文件(坑)</span></span><br><span class="line">sudo chmod 644 my.cnf</span><br></pre></td></tr></table></figure>
+
+<p>使用编辑器，修改配置文件(如果使用vim修改配置，需要在修改所有者之前修改配置，或者修改my.cnf权限为777之后修改配置，但这样改完配置后，还要改文件权限为644)。我是直接用sublime修改</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">log-bin</span>=/usr/local/mysql/mysql-bin/mysql-bin</span><br><span class="line"><span class="attr">binlog-format</span>=ROW</span><br><span class="line"><span class="attr">server-id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="创建文件夹及文件"><a href="#创建文件夹及文件" class="headerlink" title="创建文件夹及文件"></a>创建文件夹及文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql/</span><br><span class="line"><span class="comment">#创建文件夹并修改所有者</span></span><br><span class="line">mkdir mysql-bin</span><br><span class="line">chown _mysql mysql-bin</span><br><span class="line"><span class="comment">#创建文件并修改所有者</span></span><br><span class="line"><span class="built_in">cd</span> mysql-bin</span><br><span class="line">touch mysql-bin.index</span><br><span class="line">chown _mysql mysql-bin.index</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在系统偏好设置-&gt;MySQL中启动</p>
+<h5 id="其他问题："><a href="#其他问题：" class="headerlink" title="其他问题："></a>其他问题：</h5><ol>
+<li>通过官方shell脚本启动或重启，一直提示错误，原因暂未找到</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ sudo /usr/<span class="built_in">local</span>/mysql/support-files/mysql.server restart</span><br><span class="line"> ERROR! MySQL server PID file could not be found!</span><br><span class="line">Starting MySQL</span><br><span class="line">..^C</span><br><span class="line">➜  ~ </span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>启动时的错误日志在/usr/local/mysql/data/mysqld.local.err，这个是最大的坑。因为日志使用时间是祖鲁时间，找了半天启动日志把这个日志忽略了。祖鲁时间比北京时间晚8个小时。</li>
+</ol>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2022-05-27T19:08:37.136167Z 294 [Note] Access denied for user &#x27;creasylai&#x27;@&#x27;localhost&#x27; (using password: NO)</span><br></pre></td></tr></table></figure>
+
+<p>如上时间，北京时间实际是，很容易让人忽略</p>
+<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2022/05/article01/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2022/05/article01/01.png"></p>
+
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer"><div class="wechat_OA">
+  <span style="text-align: center;display: block;color: #ccc;">------欢迎关注我的公众号------</span>
+  <br/>
+    <!-- 这里添加你的二维码图片 -->
+  <img src ="/images/SubscriptionCode2.jpeg" style="width:18%;height:18%;" />
+  <br/>
+</div>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>creasylai19
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://lilongsheng.tech/2022/05/28/Mac%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" title="Mac修改MySQL配置文件">https://lilongsheng.tech/2022/05/28/Mac修改MySQL配置文件/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/Mac/" rel="tag"># Mac</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/20/ReentrantLock%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="prev" title="从使用场景分析ReentrantLock源码(待完成)">
+                  <i class="fa fa-chevron-left"></i> 从使用场景分析ReentrantLock源码(待完成)
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">creasylai19</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">34k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">31 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"creasylai19/blog.comment","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

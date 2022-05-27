@@ -584,4 +584,140 @@
         <tag>JVM</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Mac修改MySQL配置文件</title>
+    <url>/2022/05/28/Mac%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<p>因为最近在验证binlog相关功能，所以想修改log-bin参数以启用该功能，所以需要修改配置文件。以下是踩坑之后总结出的过程</p>
+<h5 id="配置文件的路径"><a href="#配置文件的路径" class="headerlink" title="配置文件的路径"></a>配置文件的路径</h5><p>查看<a href="https://dev.mysql.com/doc/refman/5.7/en/option-files.html">官方文档</a>后，知道下述方式均可修改启动配置文件，顺序是从上往下读，后面的会覆盖前面的</p>
+<table>
+<thead>
+<tr>
+<th align="left">File Name</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>/etc/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>/etc/mysql/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>*</code>SYSCONFDIR<code>*/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>$MYSQL_HOME/my.cnf</code></td>
+<td align="left">Server-specific options (server only)</td>
+</tr>
+<tr>
+<td align="left"><code>defaults-extra-file</code></td>
+<td align="left">The file specified with <a href="https://dev.mysql.com/doc/refman/5.7/en/option-file-options.html#option_general_defaults-extra-file"><code>--defaults-extra-file</code></a>, if any</td>
+</tr>
+<tr>
+<td align="left"><code>~/.my.cnf</code></td>
+<td align="left">User-specific options</td>
+</tr>
+<tr>
+<td align="left"><code>~/.mylogin.cnf</code></td>
+<td align="left">User-specific login path options (clients only)</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+
+<p>但通过命令<code>mysqld --verbose --helpd</code>的输出参数知道，我的电脑及MySQL版本实际支持下方描述的方式配置</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">Default options are read from the following files in the given order:</span><br><span class="line">/etc/my.cnf /etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf ~/.my.cnf </span><br></pre></td></tr></table></figure>
+
+<h5 id="生成配置文件并修改权限"><a href="#生成配置文件并修改权限" class="headerlink" title="生成配置文件并修改权限"></a>生成配置文件并修改权限</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc</span><br><span class="line">touch my.cnf</span><br><span class="line"><span class="comment">#把文件所有者修改为_mysql</span></span><br><span class="line">sudo chown _mysql my.cnf</span><br><span class="line"><span class="comment">#把文件权限修改为644。如果权限是777，MySQL会忽略这个配置文件(坑)</span></span><br><span class="line">sudo chmod 644 my.cnf</span><br></pre></td></tr></table></figure>
+
+<p>使用编辑器，修改配置文件(如果使用vim修改配置，需要在修改所有者之前修改配置，或者修改my.cnf权限为777之后修改配置，但这样改完配置后，还要改文件权限为644)。我是直接用sublime修改</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">log-bin</span>=/usr/local/mysql/mysql-bin/mysql-bin</span><br><span class="line"><span class="attr">binlog-format</span>=ROW</span><br><span class="line"><span class="attr">server-id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="创建文件夹及文件"><a href="#创建文件夹及文件" class="headerlink" title="创建文件夹及文件"></a>创建文件夹及文件</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql/</span><br><span class="line"><span class="comment">#创建文件夹并修改所有者</span></span><br><span class="line">mkdir mysql-bin</span><br><span class="line">chown _mysql mysql-bin</span><br><span class="line"><span class="comment">#创建文件并修改所有者</span></span><br><span class="line"><span class="built_in">cd</span> mysql-bin</span><br><span class="line">touch mysql-bin.index</span><br><span class="line">chown _mysql mysql-bin.index</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在系统偏好设置-&gt;MySQL中启动</p>
+<h5 id="其他问题："><a href="#其他问题：" class="headerlink" title="其他问题："></a>其他问题：</h5><ol>
+<li>通过官方shell脚本启动或重启，一直提示错误，原因暂未找到</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">➜  ~ sudo /usr/<span class="built_in">local</span>/mysql/support-files/mysql.server restart</span><br><span class="line"> ERROR! MySQL server PID file could not be found!</span><br><span class="line">Starting MySQL</span><br><span class="line">..^C</span><br><span class="line">➜  ~ </span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>启动时的错误日志在/usr/local/mysql/data/mysqld.local.err，这个是最大的坑。因为日志使用时间是祖鲁时间，找了半天启动日志把这个日志忽略了。祖鲁时间比北京时间晚8个小时。</li>
+</ol>
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">2022-05-27T19:08:37.136167Z 294 [Note] Access denied for user &#x27;creasylai&#x27;@&#x27;localhost&#x27; (using password: NO)</span><br></pre></td></tr></table></figure>
+
+<p>如上时间，北京时间实际是，很容易让人忽略</p>
+<p><img src="https://gitee.com/creasylai19/blog.images/raw/master/img/2022/05/article01/01.png" alt="https://gitee.com/creasylai19/blog.images/raw/master/img/2022/05/article01/01.png"></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>Mac</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从使用场景分析ReentrantLock源码(待完成)</title>
+    <url>/2022/04/20/ReentrantLock%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</url>
+    <content><![CDATA[<p>Lock接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>Condition接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Condition</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">awaitUninterruptibly</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">awaitNanos</span><span class="params">(<span class="keyword">long</span> nanosTimeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">await</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">awaitUntil</span><span class="params">(Date deadline)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">signal</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">signalAll</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">            selfInterrupt();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p> AbstractQueuedSynchronizer类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node SHARED = <span class="keyword">new</span> Node();</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node EXCLUSIVE = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED =  <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIGNAL    = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONDITION = -<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PROPAGATE = -<span class="number">3</span>;</span><br><span class="line">        <span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus;</span><br><span class="line">        <span class="keyword">volatile</span> Node prev;</span><br><span class="line">        <span class="keyword">volatile</span> Node next;</span><br><span class="line">        <span class="keyword">volatile</span> Thread thread;</span><br><span class="line">        Node nextWaiter;</span><br><span class="line">        <span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">isShared</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> nextWaiter == SHARED;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">final</span> Node <span class="title">predecessor</span><span class="params">()</span> <span class="keyword">throws</span> NullPointerException </span>&#123;</span><br><span class="line">            Node p = prev;</span><br><span class="line">            <span class="keyword">if</span> (p == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">        Node() &#123;    <span class="comment">// Used to establish initial head or SHARED marker</span></span><br><span class="line">        &#125;</span><br><span class="line">        Node(Thread thread, Node mode) &#123;     <span class="comment">// Used by addWaiter</span></span><br><span class="line">            <span class="keyword">this</span>.nextWaiter = mode;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line">        Node(Thread thread, <span class="keyword">int</span> waitStatus) &#123; <span class="comment">// Used by Condition</span></span><br><span class="line">            <span class="keyword">this</span>.waitStatus = waitStatus;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>ReentrantLock</tag>
+        <tag>源码</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何面试研发工程师(待完成)</title>
+    <url>/2022/02/25/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88/</url>
+    <content><![CDATA[<p>面试结束写面试评价</p>
+<ul>
+<li>Coding question 写代码问题：需要写实际的代码，语言不限；</li>
+<li>Design question 设计问题：系统设计、功能设计；</li>
+<li>Analytical question 分析问题：算法、数据结构、问题分析、逻辑分析、等等；</li>
+<li>Open ended question 无固定答案问题：主要看候选人的逻辑分析和问题解决能力；</li>
+</ul>
+<span id="more"></span>
+
+<p>Google的打分解释：<br>1分：坚决不要，而且愿意说服他人为什么不要<br>2分：不要，但可以被别人说服要<br>3分：要，但可以被别人说服成不要<br>4分：坚决要，吐血推荐。愿意说服他人为什么非要不可</p>
+<p>面试技术管理者</p>
+<ul>
+<li>工程能力和系统设计能力</li>
+<li>团队组织架构设计能力</li>
+<li>技术的宽度和深度</li>
+<li>如何激励团队成长</li>
+<li>研发团队绩效考核怎么做</li>
+</ul>
+<p>参考：<a href="https://medium.com/@philying/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-4078177d1cb8">https://medium.com/@philying/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-4078177d1cb8</a></p>
+]]></content>
+      <categories>
+        <category>管理</category>
+      </categories>
+      <tags>
+        <tag>管理者</tag>
+        <tag>面试官</tag>
+      </tags>
+  </entry>
 </search>
