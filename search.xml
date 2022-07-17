@@ -56,6 +56,52 @@
       </tags>
   </entry>
   <entry>
+    <title>LeetCode224-基本计算器</title>
+    <url>/2022/02/17/LeetCode224-%E5%9F%BA%E6%9C%AC%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
+    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串表达式 <code>s</code> ，请你实现一个基本计算器来计算并返回它的值。</p>
+<p>注意:不允许使用任何将字符串作为数学表达式计算的内置函数，比如 <code>eval() </code>。</p>
+ <span id="more"></span>
+
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;1 + 1&quot;</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot; 2-1 + 2 &quot;</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;(1+(4+5+2)-3)+(6+8)&quot;</span><br><span class="line">输出：23</span><br></pre></td></tr></table></figure>
+
+
+
+
+<p>提示：</p>
+<ul>
+<li>1 &lt;= s.length &lt;= 3 * 105</li>
+<li>s 由数字、’+’、’-‘、’(‘、’)’、和 ‘ ‘ 组成</li>
+<li>s 表示一个有效的表达式</li>
+<li>‘+’ 不能用作一元运算(例如， “+1” 和 “+(2 + 3)” 无效)</li>
+<li>‘-‘ 可以用作一元运算(即 “-1” 和 “-(2 + 3)” 是有效的)</li>
+<li>输入中不存在两个连续的操作符</li>
+<li>每个数字和运行的计算将适合于一个有符号的 32位 整数</li>
+</ul>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>因为以前大学的时候曾经学习过使用两个栈做表达式运算，所以看完题目后，便顺着这个思路解题</p>
+<p>代码如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"><span class="comment">//代码可以优化</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">calculate</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        LinkedList&lt;Integer&gt; data = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        LinkedList&lt;Character&gt; operator = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        s = s.replace(<span class="string">&quot; &quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = s.charAt(i);</span><br><span class="line">            <span class="keyword">switch</span> (c)&#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;(&#x27;</span>:</span><br><span class="line">                    <span class="keyword">if</span>( (i+<span class="number">1</span>) &lt; s.length() &amp;&amp; s.charAt(i+<span class="number">1</span>) == <span class="string">&#x27;-&#x27;</span> )&#123;</span><br><span class="line">                        data.push(<span class="number">0</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    operator.push(c);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">                    operator.push(c);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;)&#x27;</span>:</span><br><span class="line">                    operator.pop();</span><br><span class="line">                    <span class="keyword">int</span> popNum = data.pop();</span><br><span class="line">                    calculateNum(popNum, data, operator);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">                    sb.append(c);</span><br><span class="line">                    <span class="keyword">int</span> j = <span class="number">1</span>;</span><br><span class="line">                    <span class="keyword">while</span> ( (i+j) &lt; s.length() &amp;&amp; Character.isDigit(s.charAt(i+j)) )&#123;</span><br><span class="line">                        sb.append(s.charAt(i+j));</span><br><span class="line">                        j++;</span><br><span class="line">                    &#125;</span><br><span class="line">                    i = i+j-<span class="number">1</span>;</span><br><span class="line">                    <span class="keyword">int</span> currentNum = Integer.parseInt(sb.toString());</span><br><span class="line">                    calculateNum(currentNum, data, operator);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> data.pop();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">calculateNum</span><span class="params">(<span class="keyword">int</span> currentNum, LinkedList&lt;Integer&gt; data, LinkedList&lt;Character&gt; operator)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( operator.size() == <span class="number">0</span> )&#123;</span><br><span class="line">            data.push(currentNum);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">boolean</span> hasUseCurrentNum = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (operator.size() &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="string">&#x27;+&#x27;</span> == operator.peek())&#123;</span><br><span class="line">                operator.pop();</span><br><span class="line">                <span class="keyword">int</span> temp = data.pop();</span><br><span class="line">                data.push(temp+currentNum);</span><br><span class="line">                hasUseCurrentNum = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">&#x27;-&#x27;</span> == operator.peek())&#123;</span><br><span class="line">                operator.pop();</span><br><span class="line">                <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">if</span>(data.size() &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                    temp = data.pop();</span><br><span class="line">                &#125;</span><br><span class="line">                data.push(temp-currentNum);</span><br><span class="line">                hasUseCurrentNum = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(!hasUseCurrentNum)&#123;</span><br><span class="line">                    data.push(currentNum);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Java里面的栈Stack底层是数组结构，在容量不够时，难免会涉及扩容，扩容则需要迁移数据，效率较低。这里使用LinkedList作为栈使用。下图第二行是使用Stack实现，执行用时56ms，第一行是使用LinkedList实现，执行用时17ms</p>
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/02/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/01.png"></p>
+<p>题目转载自：<a href="https://leetcode-cn.com/problems/basic-calculator">https://leetcode-cn.com/problems/basic-calculator</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LeetCode36-有效的数独</title>
     <url>/2021/11/23/LeetCode36/</url>
     <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>请你判断一个 <code>9 x 9</code> 的数独是否有效。只需要 <strong>根据以下规则</strong> ，验证已经填入的数字是否有效即可。</p>
@@ -100,6 +146,357 @@
         <tag>LeetCode</tag>
         <tag>算法</tag>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode38-外观数列</title>
+    <url>/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/</url>
+    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个正整数<code> n</code> ，输出外观数列的第 <code>n</code> 项。</p>
+<p>「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。</p>
+<p>你可以将其视作是由递归公式定义的数字字符串序列：</p>
+<ul>
+<li><p><code>countAndSay(1) = &quot;1&quot;</code></p>
+</li>
+<li><p><code>countAndSay(n)</code> 是对<code> countAndSay(n-1)</code> 的描述，然后转换成另一个数字字符串。</p>
+</li>
+</ul>
+ <span id="more"></span>
+
+<p>前五项如下：</p>
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">1.     1</span><br><span class="line">2.     11</span><br><span class="line">3.     21</span><br><span class="line">4.     1211</span><br><span class="line">5.     111221</span><br><span class="line">第一项是数字 1 </span><br><span class="line">描述前一项，这个数是 1 即 “ 一 个 1 ”，记作 &quot;11&quot;</span><br><span class="line">描述前一项，这个数是 11 即 “ 二 个 1 ” ，记作 &quot;21&quot;</span><br><span class="line">描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 &quot;1211&quot;</span><br><span class="line">描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 &quot;111221&quot;</span><br></pre></td></tr></table></figure>
+
+<p>要 <strong>描述</strong>  一个数字字符串，首先要将字符串分割为 <strong>最小</strong> 数量的组，每个组都由连续的最多 <strong>相同字符</strong> 组成。然后对于每个组，先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。</p>
+<p>例如，数字字符串<code> &quot;3322251&quot;</code> 的描述如下图：</p>
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/00.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/00.png"></p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1</span><br><span class="line">输出：&quot;1&quot;</span><br><span class="line">解释：这是一个基本样例。</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 4</span><br><span class="line">输出：&quot;1211&quot;</span><br><span class="line">解释：</span><br><span class="line">countAndSay(1) = &quot;1&quot;</span><br><span class="line">countAndSay(2) = 读 &quot;1&quot; = 一 个 1 = &quot;11&quot;</span><br><span class="line">countAndSay(3) = 读 &quot;11&quot; = 二 个 1 = &quot;21&quot;</span><br><span class="line">countAndSay(4) = 读 &quot;21&quot; = 一 个 2 + 一 个 1 = &quot;12&quot; + &quot;11&quot; = &quot;1211&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= n &lt;= 30</code></li>
+</ul>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目后，觉得用顺推的思路比较容易。我们可以依次算出第1个、第2个、第3个…第n-1个外观数列，则第n个外观数列也容易算出</p>
+<p>代码如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">countAndSay</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">&quot;1&quot;</span>;</span><br><span class="line">        <span class="keyword">int</span> loop = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> ( loop &lt; n )&#123;</span><br><span class="line">            loop++;</span><br><span class="line">            str = getNextStr(str);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getNextStr</span><span class="params">(String input)</span></span>&#123;</span><br><span class="line">        <span class="keyword">char</span> start = input.charAt(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; input.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>( input.charAt(i) != start )&#123;</span><br><span class="line">                sb.append(count);</span><br><span class="line">                sb.append(start);</span><br><span class="line">                start = input.charAt(i);</span><br><span class="line">                count = <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sb.append(count);</span><br><span class="line">        sb.append(start);</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/01.png"></p>
+<p>题目转载自：<a href="https://leetcode-cn.com/problems/count-and-say">https://leetcode-cn.com/problems/count-and-say</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode423-从英文中重建数字</title>
+    <url>/2021/11/24/LeetCode423/</url>
+    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串 <code>s</code> ，其中包含字母顺序打乱的用英文单词表示的若干数字（<code>0-9</code>）。按 <strong>升序</strong> 返回原始的数字。</p>
+ <span id="more"></span>
+
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;owoztneoer&quot;</span><br><span class="line">输出：&quot;012&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;fviefuro&quot;</span><br><span class="line">输出：&quot;45&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>提示：</p>
+<ul>
+<li>1 &lt;= s.length &lt;= 105</li>
+<li>s[i] 为 [“e”,”g”,”f”,”i”,”h”,”o”,”n”,”s”,”r”,”u”,”t”,”w”,”v”,”x”,”z”] 这些字符之一</li>
+<li>s 保证是一个符合题目要求的字符串</li>
+</ul>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目后，大概猜出可能需要每个数字的特定字母做标识，所以干脆列出0-9数字的英文单词观察</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ZERO = <span class="string">&quot;zero&quot;</span>;<span class="comment">//Z</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ONE = <span class="string">&quot;one&quot;</span>;<span class="comment">//Z,W,U-&gt;O</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String TWO = <span class="string">&quot;two&quot;</span>;<span class="comment">//W</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String THREE = <span class="string">&quot;three&quot;</span>;<span class="comment">//Z,U-&gt;R</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String FOUR = <span class="string">&quot;four&quot;</span>;<span class="comment">//U</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String FIVE = <span class="string">&quot;five&quot;</span>;<span class="comment">//U-&gt;F</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SIX = <span class="string">&quot;six&quot;</span>;<span class="comment">//X</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SEVEN = <span class="string">&quot;seven&quot;</span>;<span class="comment">//X-&gt;S</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String EIGHT = <span class="string">&quot;eight&quot;</span>;<span class="comment">//G</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String NINE = <span class="string">&quot;nine&quot;</span>;<span class="comment">//G,X,U-&gt;F-&gt;I</span></span><br></pre></td></tr></table></figure>
+
+<p>如上，观察后得出，可以分三轮，计算出每个数字的出现次数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//第一轮，选出zero,two,four,six,eight</span></span><br><span class="line"><span class="comment">//第二轮，选出one,three,five,seven</span></span><br><span class="line"><span class="comment">//第三轮，选出nine</span></span><br></pre></td></tr></table></figure>
+
+<p>得出方法后，代码就很容易写了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Optional;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">originalDigits</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//首先把s做分解，用Map&lt;Character, Integer&gt;做容器</span></span><br><span class="line">        Map&lt;Character, Integer&gt; wordCount = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = s.charAt(i);</span><br><span class="line">            <span class="keyword">if</span>( wordCount.containsKey(c) )&#123;</span><br><span class="line">                wordCount.put(c, wordCount.get(c)+<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                wordCount.put(c, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] numCount = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="comment">//第一轮</span></span><br><span class="line">        numCount[<span class="number">0</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;z&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">2</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;w&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">4</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;u&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">6</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;x&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">8</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;g&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//第二轮</span></span><br><span class="line">        numCount[<span class="number">1</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;o&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">0</span>]-numCount[<span class="number">2</span>]-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">3</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;r&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">0</span>]-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">5</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;f&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">7</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;s&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">6</span>];</span><br><span class="line">        <span class="comment">//第三轮</span></span><br><span class="line">        numCount[<span class="number">9</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;i&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">5</span>]-numCount[<span class="number">6</span>]-numCount[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numCount.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numCount[i]; j++) &#123;</span><br><span class="line">                sb.append(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1124/article2/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1124/article2/01.png"></p>
+<p>题目转载自：<a href="https://leetcode-cn.com/problems/reconstruct-original-digits-from-english">https://leetcode-cn.com/problems/reconstruct-original-digits-from-english</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode807-保持城市天际线</title>
+    <url>/2021/12/13/LeetCode807-%E4%BF%9D%E6%8C%81%E5%9F%8E%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF/</url>
+    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一座由 <code>n x n</code> 个街区组成的城市，每个街区都包含一座立方体建筑。给你一个下标从 <strong>0</strong> 开始的 <code>n x n</code> 整数矩阵 <code>grid</code> ，其中 <code>grid[r][c]</code> 表示坐落于 <code>r</code> 行 <code>c</code> 列的建筑物的 <strong>高度</strong> 。</p>
+<p>城市的 <strong>天际线</strong> 是从远处观察城市时，所有建筑物形成的外部轮廓。从东、南、西、北四个主要方向观测到的 <strong>天际线</strong> 可能不同。</p>
+<p>我们被允许为 <strong>任意数量的建筑物</strong> 的高度增加 <strong>任意增量（不同建筑物的增量可能不同）</strong> 。 高度为 <code>0</code> 的建筑物的高度也可以增加。然而，增加的建筑物高度 <strong>不能影响</strong> 从任何主要方向观察城市得到的 <strong>天际线</strong> 。</p>
+<p>在 <strong>不改变</strong> 从任何主要方向观测到的城市 <strong>天际线</strong> 的前提下，返回建筑物可以增加的 <strong>最大高度增量总和</strong> 。</p>
+<span id="more"></span>
+
+<p><strong>示例 1：</strong><br><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1213/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1213/article01/01.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：grid = [[3,0,8,4],[2,4,5,7],[9,2,6,3],[0,3,1,0]]</span><br><span class="line">输出：35</span><br><span class="line">解释：建筑物的高度如上图中心所示。</span><br><span class="line">用红色绘制从不同方向观看得到的天际线。</span><br><span class="line">在不影响天际线的情况下，增加建筑物的高度：</span><br><span class="line">gridNew = [ [8, 4, 8, 7],</span><br><span class="line">            [7, 4, 7, 7],</span><br><span class="line">            [9, 4, 8, 7],</span><br><span class="line">            [3, 3, 3, 3] ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：grid = [[0,0,0],[0,0,0],[0,0,0]]</span><br><span class="line">输出：0</span><br><span class="line">解释：增加任何建筑物的高度都会导致天际线的变化。</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>n == grid.length</code></li>
+<li><code>n == grid[r].length</code></li>
+<li><code>2 &lt;= n &lt;= 50</code></li>
+<li><code>0 &lt;= grid[r][c] &lt;= 100</code></li>
+</ul>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目可知，只要建筑物增加的高度不高于其所在行&amp;所在列的最小值，则不会影响天际线。所以，解题也就从计算行列最小值-当前建筑物的高度，则为当前建筑物可增加的高度</p>
+<p>代码如下(代码有优化的空间，懒得处理了)：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxIncreaseKeepingSkyline</span><span class="params">(<span class="keyword">int</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] rowMax = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length];</span><br><span class="line">        <span class="keyword">int</span>[] colMax = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; grid.length; i++) &#123;</span><br><span class="line">            rowMax[i] = grid[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid[i].length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>( rowMax[i] &lt; grid[i][j] )&#123;</span><br><span class="line">                    rowMax[i] = grid[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//因为行列是相等的</span></span><br><span class="line">            colMax[i] = grid[<span class="number">0</span>][i];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>( colMax[i] &lt; grid[j][i] )&#123;</span><br><span class="line">                    colMax[i] = grid[j][i];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//        System.out.println(Arrays.toString(rowMax));</span></span><br><span class="line"><span class="comment">//        System.out.println(Arrays.toString(colMax));</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; grid.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; grid[i].length; j++) &#123;</span><br><span class="line">                sum += Math.min(rowMax[i], colMax[j]) - grid[i][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>题目转载自：<a href="https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline">https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mac修改MySQL配置文件</title>
+    <url>/2022/05/28/Mac%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<p>因为最近在验证binlog相关功能，所以想修改log-bin参数以启用该功能，所以需要修改配置文件。以下是踩坑之后总结出的过程</p>
+<h5 id="配置文件的路径"><a href="#配置文件的路径" class="headerlink" title="配置文件的路径"></a>配置文件的路径</h5><p>查看<a href="https://dev.mysql.com/doc/refman/5.7/en/option-files.html">官方文档</a>后，知道下述方式均可修改启动配置文件，顺序是从上往下读，后面的会覆盖前面的</p>
+<table>
+<thead>
+<tr>
+<th align="left">File Name</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>/etc/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>/etc/mysql/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>*</code>SYSCONFDIR<code>*/my.cnf</code></td>
+<td align="left">Global options</td>
+</tr>
+<tr>
+<td align="left"><code>$MYSQL_HOME/my.cnf</code></td>
+<td align="left">Server-specific options (server only)</td>
+</tr>
+<tr>
+<td align="left"><code>defaults-extra-file</code></td>
+<td align="left">The file specified with <a href="https://dev.mysql.com/doc/refman/5.7/en/option-file-options.html#option_general_defaults-extra-file"><code>--defaults-extra-file</code></a>, if any</td>
+</tr>
+<tr>
+<td align="left"><code>~/.my.cnf</code></td>
+<td align="left">User-specific options</td>
+</tr>
+<tr>
+<td align="left"><code>~/.mylogin.cnf</code></td>
+<td align="left">User-specific login path options (clients only)</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+
+<p>但通过命令<code>mysqld --verbose --helpd</code>的输出参数知道，我的电脑及MySQL版本实际支持下方描述的方式配置</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">Default options are read from the following files in the given order:</span><br><span class="line">/etc/my.cnf /etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf ~/.my.cnf </span><br></pre></td></tr></table></figure>
+
+<h5 id="生成配置文件并修改权限"><a href="#生成配置文件并修改权限" class="headerlink" title="生成配置文件并修改权限"></a>生成配置文件并修改权限</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc</span><br><span class="line">touch my.cnf</span><br><span class="line"><span class="comment">#把文件所有者修改为_mysql</span></span><br><span class="line">sudo chown _mysql my.cnf</span><br><span class="line"><span class="comment">#把文件权限修改为644。如果权限是777，MySQL会忽略这个配置文件(坑)</span></span><br><span class="line">sudo chmod 644 my.cnf</span><br></pre></td></tr></table></figure>
+
+<p>使用编辑器，修改配置文件(如果使用vim修改配置，需要在修改所有者之前修改配置，或者修改my.cnf权限为777之后修改配置，但这样改完配置后，还要改文件权限为644)。我是直接用sublime修改</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">log-bin</span>=/usr/local/mysql/mysql-bin/mysql-bin</span><br><span class="line"><span class="attr">binlog-format</span>=ROW</span><br><span class="line"><span class="attr">server-id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="创建文件夹及文件"><a href="#创建文件夹及文件" class="headerlink" title="创建文件夹及文件"></a>创建文件夹及文件</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql/</span><br><span class="line"><span class="comment">#创建文件夹并修改所有者</span></span><br><span class="line">mkdir mysql-bin</span><br><span class="line">chown _mysql mysql-bin</span><br><span class="line"><span class="comment">#创建文件并修改所有者</span></span><br><span class="line"><span class="built_in">cd</span> mysql-bin</span><br><span class="line">touch mysql-bin.index</span><br><span class="line">chown _mysql mysql-bin.index</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在系统偏好设置-&gt;MySQL中启动</p>
+<h5 id="其他问题："><a href="#其他问题：" class="headerlink" title="其他问题："></a>其他问题：</h5><ol>
+<li>通过官方shell脚本启动或重启，一直提示错误，原因暂未找到</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">➜  ~ sudo /usr/<span class="built_in">local</span>/mysql/support-files/mysql.server restart</span><br><span class="line"> ERROR! MySQL server PID file could not be found!</span><br><span class="line">Starting MySQL</span><br><span class="line">..^C</span><br><span class="line">➜  ~ </span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>启动时的错误日志在/usr/local/mysql/data/mysqld.local.err，这个是最大的坑。因为日志使用时间是祖鲁时间，找了半天启动日志把这个日志忽略了。祖鲁时间比北京时间晚8个小时。</li>
+</ol>
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">2022-05-27T19:08:37.136167Z 294 [Note] Access denied for user &#x27;creasylai&#x27;@&#x27;localhost&#x27; (using password: NO)</span><br></pre></td></tr></table></figure>
+
+<p>如上时间，北京时间实际是，很容易让人忽略</p>
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article01/01.png"></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>Mac</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Maven插件</title>
+    <url>/2022/07/02/Maven%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<p>Maven是一款基于插件作业的构建工具，它自身内置了非常多我们平常开发所需要的插件。如清理资源插件<code>maven-clean-plugin</code>，编译插件<code>maven-compiler-plugin</code>，打包插件<code>maven-jar-plugin</code>等。在工作中，我们也可以开发自己的插件，帮助我们提高开发效率</p>
+<p>下方以开发一个统计目录下所有文件的内容行数的插件为例</p>
+<span id="more"></span>
+
+<h4 id="创建Maven插件项目"><a href="#创建Maven插件项目" class="headerlink" title="创建Maven插件项目"></a>创建Maven插件项目</h4><p>使用archetype<code>maven-archetype-mojo</code>创建一个Maven项目(对应的groupid为<code>org.apache.maven.archetypes</code>)</p>
+<p>项目名最好使用<code>name-maven-plugin</code>，这样后续可以直接使用name:goal来执行插件目标</p>
+<p>如下图，IDEA创建了一个<code>count-maven-plugin</code>项目</p>
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/07/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/07/article01/01.png"></p>
+<h4 id="修改POM文件"><a href="#修改POM文件" class="headerlink" title="修改POM文件"></a>修改POM文件</h4><p>IDEA自动创建的项目中，<code>maven-plugin-api</code>版本是2.0，太低了。我的Maven版本是3.6.3，所以这里我也把<code>maven-plugin-api</code>版本改成3.6.3</p>
+<p>同时，我们加入<code>maven-plugin-annotations</code>依赖，这样开发时可以使用maven注解。同时，我们修改项目的JDK版本为1.8。最终的pom.xml文件如下</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.creasy.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>count-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>maven-plugin<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>count-maven-plugin Maven Mojo<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.apache.org<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-plugin-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.6.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- dependencies to annotations --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 没有3.6.3版本，我们使用3.6.2版本 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugin-tools<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-plugin-annotations<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.6.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span> <span class="comment">&lt;!-- annotations are not used at runtime because @Retention(value=CLASS), they are needed only to build the plugin --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="添加goal对应的类"><a href="#添加goal对应的类" class="headerlink" title="添加goal对应的类"></a>添加goal对应的类</h4><p>项目默认创建了一个MyMojo</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.creasy.maven.plugins;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.AbstractMojo;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.MojoExecutionException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileWriter;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Goal which touches a timestamp file.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@goal</span> touch</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@phase</span> process-sources</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMojo</span></span></span><br><span class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">AbstractMojo</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Location of the file.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@parameter</span> expression=&quot;$&#123;project.build.directory&#125;&quot;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@required</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> File outputDirectory;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> MojoExecutionException</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        File f = outputDirectory;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( !f.exists() )</span><br><span class="line">        &#123;</span><br><span class="line">            f.mkdirs();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        File touch = <span class="keyword">new</span> File( f, <span class="string">&quot;touch.txt&quot;</span> );</span><br><span class="line"></span><br><span class="line">        FileWriter w = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            w = <span class="keyword">new</span> FileWriter( touch );</span><br><span class="line"></span><br><span class="line">            w.write( <span class="string">&quot;touch.txt&quot;</span> );</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> ( IOException e )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MojoExecutionException( <span class="string">&quot;Error creating file &quot;</span> + touch, e );</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">finally</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> ( w != <span class="keyword">null</span> )</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">try</span></span><br><span class="line">                &#123;</span><br><span class="line">                    w.close();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">catch</span> ( IOException e )</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">// ignore</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个类很简单，就是在outputDirectory(对应目录为<code>$&#123;project.build.directory&#125;</code>，也就是常见的maven项目的target目录)目录下创建一个touch.txt文件，文件内容为touch.txt</p>
+<p>我们参考MyMojo创建一个CountMojo类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.creasy.maven.plugins;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.maven.model.Resource;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.AbstractMojo;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.MojoExecutionException;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugins.annotations.LifecyclePhase;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugins.annotations.Mojo;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugins.annotations.Parameter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Objects;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mojo(name = &quot;count&quot;,//对应插件的goal</span></span><br><span class="line"><span class="meta">        defaultPhase = LifecyclePhase.COMPILE,//绑定Maven的生命周期的默认值</span></span><br><span class="line"><span class="meta">        requiresProject = true,</span></span><br><span class="line"><span class="meta">        threadSafe = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountMojo</span> <span class="keyword">extends</span> <span class="title">AbstractMojo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Parameter(defaultValue = &quot;$&#123;project.build.sourceDirectory&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> File sourceDirectory;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Parameter(defaultValue = &quot;$&#123;project.build.testSourceDirectory&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> File testSourceDirectory;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Parameter(defaultValue = &quot;$&#123;project.resources&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Resource&gt; resources;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Parameter(defaultValue = &quot;$&#123;project.testResources&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Resource&gt; testResources;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> <span class="keyword">throws</span> MojoExecutionException </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            countLine(sourceDirectory);</span><br><span class="line">            countLine(testSourceDirectory);</span><br><span class="line">            <span class="keyword">for</span> (Resource resource : resources) &#123;</span><br><span class="line">                countLine(<span class="keyword">new</span> File(resource.getDirectory()));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (Resource testResource : testResources) &#123;</span><br><span class="line">                countLine(<span class="keyword">new</span> File(testResource.getDirectory()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MojoExecutionException(<span class="string">&quot;Unable to count line!&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">countLine</span><span class="params">(File dir)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( dir.exists() )&#123;</span><br><span class="line">            List&lt;File&gt; files = getFileByDir(dir);</span><br><span class="line">            <span class="keyword">long</span> line = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (File file : files) &#123;</span><br><span class="line">                line += countFile(file);</span><br><span class="line">            &#125;</span><br><span class="line">            getLog().info(String.format(<span class="string">&quot;Directory:%s, lines:%s&quot;</span>, dir.getPath(), line));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;File&gt; <span class="title">getFileByDir</span><span class="params">(File dir)</span> </span>&#123;</span><br><span class="line">        List&lt;File&gt; retList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (File file : Objects.requireNonNull(dir.listFiles())) &#123;</span><br><span class="line">            <span class="keyword">if</span> (file.isDirectory()) &#123;</span><br><span class="line">                retList.addAll(getFileByDir(file));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                retList.add(file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> retList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">long</span> <span class="title">countFile</span><span class="params">(File f)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> retValue = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> (BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(f))) &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">null</span> != bufferedReader.readLine()) &#123;</span><br><span class="line">                retValue++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> retValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个类还是比较简单的，有几点内容说明下</p>
+<ul>
+<li><code>@Parameter(defaultValue = &quot;$&#123;project.build.sourceDirectory&#125;&quot;)</code></li>
+</ul>
+<p>类中的变量可以通过@Parameter注解，定义使用插件时可以传参，如果不传则默认使用项目的<code>$&#123;project.build.sourceDirectory&#125;</code>属性。project.build.sourceDirectory这个属性其实是在super POM中定义的，具体可以使用的变量参考<a href="https://maven.apache.org/ref/3.8.6/maven-core/apidocs/org/apache/maven/plugin/PluginParameterExpressionEvaluator.html">这里</a></p>
+<ul>
+<li>类必须继承AbstractMojo，实现execute接口</li>
+<li>需要使用@Mojo注解的name属性定义goal</li>
+</ul>
+<p>以上，执行<code>mvn clean install</code>，即可把项目安装到本地仓库</p>
+<h4 id="使用插件"><a href="#使用插件" class="headerlink" title="使用插件"></a>使用插件</h4><p>其他项目要使用插件，只需要在pom文件中添加</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.creasy.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>count-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goal</span>&gt;</span>count<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>因为count默认绑定了compile生命周期，所以这里至配置了插件的goal</p>
+<p>执行<code>mvn clean compile</code>，如下，插件输出了每个资源目录下所有文件的内容行数</p>
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/07/article01/02.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/07/article01/02.png"></p>
+<p>参考文档：</p>
+<p><a href="https://maven.apache.org/guides/plugin/guide-java-plugin-development.html">https://maven.apache.org/guides/plugin/guide-java-plugin-development.html</a></p>
+<p><a href="https://maven.apache.org/pom.html">https://maven.apache.org/pom.html</a></p>
+]]></content>
+      <categories>
+        <category>Maven</category>
+      </categories>
+      <tags>
+        <tag>插件</tag>
+        <tag>构建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL主从搭建(待完成)</title>
+    <url>/2022/05/29/MySQL%E4%B8%BB%E4%BB%8E%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p>目前我所在公司，申请数据库时，基本都是MySQL主从交付。这篇文章，也主要讲下MySQL主从</p>
+<h4 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h4><p>MySQL高可用是基于binlog。对binlog的解释，可以参看下<a href="https://dev.mysql.com/doc/internals/en/binary-log-overview.html">官方文档</a></p>
+<blockquote>
+<p>The binary log is a set of log files that contain information about data modifications made to a MySQL server instance. The log is enabled by starting the server with the <code>--log-bin</code> option</p>
+</blockquote>
+<p>默认binlog是关闭的，可以通过下方语句查询得到Value为OFF</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;log_bin&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>要打开binlog，可以通过修改配置文件/etc/my.cnf(Unix like系统下的配置)，重启MySQL</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="comment">#binlog文件的存放目录</span></span><br><span class="line"><span class="attr">log-bin</span>=/usr/local/mysql/mysql-bin/mysql-bin</span><br><span class="line"><span class="comment">#binlog文件格式</span></span><br><span class="line"><span class="attr">binlog-format</span>=MIXED</span><br><span class="line"><span class="comment">#server id</span></span><br><span class="line"><span class="attr">server-id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h5 id="binlog-format三种格式"><a href="#binlog-format三种格式" class="headerlink" title="binlog-format三种格式"></a>binlog-format三种格式</h5><p>假设我们执行SQL</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="comment">/*comment*/</span> <span class="keyword">where</span> c <span class="operator">&gt;=</span> <span class="number">20</span> <span class="keyword">and</span> d <span class="operator">&lt;=</span> <span class="number">25</span> limit <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>STATEMENT格式</li>
+</ul>
+<p>binlog文件中记录的是原始的SQL语句，如上方SQL，binlog中记录的是</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="comment">/*comment*/</span> <span class="keyword">where</span> c <span class="operator">&gt;=</span> <span class="number">20</span> <span class="keyword">and</span> d <span class="operator">&lt;=</span> <span class="number">25</span> limit <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这种格式可能导致主从数据不一致</p>
+<ul>
+<li>ROW格式**[推荐]**</li>
+</ul>
+<p>binlog文件中记录的是SQL语句影响的所有行，如上方SQL，binlog中可能记录的是</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*所有满足的行都记录下来*/</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="keyword">where</span> c <span class="operator">=</span> <span class="number">20</span> <span class="keyword">and</span> d <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="keyword">where</span> c <span class="operator">=</span> <span class="number">21</span> <span class="keyword">and</span> d <span class="operator">=</span> <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果<code>binlog_row_image</code>配置为FULL，表t还有其他字段，则binlog会把所有字段都记录下来。如上方SQL，binlog中可能记录的是</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="keyword">where</span> c <span class="operator">=</span> <span class="number">20</span> <span class="keyword">and</span> d <span class="operator">=</span> <span class="number">20</span> <span class="keyword">and</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="keyword">where</span> c <span class="operator">=</span> <span class="number">21</span> <span class="keyword">and</span> d <span class="operator">=</span> <span class="number">20</span> <span class="keyword">and</span> id <span class="operator">=</span> <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这种格式缺点是可能导致记录的数据特别多，比如满足SQL条件的行有上千行，则binlog会全部记下所有行。优点是避开了statement格式的主从不一致的情况，另外，通过分析binlog，我们也很容易恢复被误修改的数据。生产上推荐这种方式</p>
+<ul>
+<li>MIXED格式</li>
+</ul>
+<p>这种格式是上两种方式的混合，由MySQL判断，如果不会造成主从不一致，则记录原始SQL语句(statement)，否则记录所有变更行(row)。</p>
+<p>生产上首推ROW格式，易于恢复误修改数据。如果资源不足，可以考虑MIXED格式</p>
+<h5 id="binlog文件分析"><a href="#binlog文件分析" class="headerlink" title="binlog文件分析"></a>binlog文件分析</h5><p>通过下方语句，可以查看binlog记录内容</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> binlog events <span class="keyword">in</span> <span class="string">&#x27;mysql-bin.000001&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>结果</p>
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/01.png"></p>
+<p>ROW格式下，<code>show binlog</code>只能看到有那些变更，无法看到具体语句</p>
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/02.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/02.png"></p>
+<p>通过mysqlbinlog工具，可以分析ROW格式下的binlog</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysqlbinlog  -vv /usr/local/mysql-5.7.31-macos10.14-x86_64/mysql-bin/mysql-bin.000002 --start-position=544;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/03.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/03.png"></p>
+<p>另外，通过mysqlbinlog还可以执行binlog中的SQL</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysqlbinlog /usr/local/mysql-5.7.31-macos10.14-x86_64/mysql-bin/mysql-bin.000001  --start-position=544 --stop-position=862 | mysql -u$user -p$password;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>主从</tag>
+        <tag>高可用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从使用场景分析ReentrantLock源码(待完成)</title>
+    <url>/2022/04/20/ReentrantLock%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</url>
+    <content><![CDATA[<p>Lock接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>Condition接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Condition</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">awaitUninterruptibly</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">awaitNanos</span><span class="params">(<span class="keyword">long</span> nanosTimeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">await</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">awaitUntil</span><span class="params">(Date deadline)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">signal</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">signalAll</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">            selfInterrupt();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p> AbstractQueuedSynchronizer类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node SHARED = <span class="keyword">new</span> Node();</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node EXCLUSIVE = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED =  <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIGNAL    = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONDITION = -<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PROPAGATE = -<span class="number">3</span>;</span><br><span class="line">        <span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus;</span><br><span class="line">        <span class="keyword">volatile</span> Node prev;</span><br><span class="line">        <span class="keyword">volatile</span> Node next;</span><br><span class="line">        <span class="keyword">volatile</span> Thread thread;</span><br><span class="line">        Node nextWaiter;</span><br><span class="line">        <span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">isShared</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> nextWaiter == SHARED;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">final</span> Node <span class="title">predecessor</span><span class="params">()</span> <span class="keyword">throws</span> NullPointerException </span>&#123;</span><br><span class="line">            Node p = prev;</span><br><span class="line">            <span class="keyword">if</span> (p == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">        Node() &#123;    <span class="comment">// Used to establish initial head or SHARED marker</span></span><br><span class="line">        &#125;</span><br><span class="line">        Node(Thread thread, Node mode) &#123;     <span class="comment">// Used by addWaiter</span></span><br><span class="line">            <span class="keyword">this</span>.nextWaiter = mode;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line">        Node(Thread thread, <span class="keyword">int</span> waitStatus) &#123; <span class="comment">// Used by Condition</span></span><br><span class="line">            <span class="keyword">this</span>.waitStatus = waitStatus;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>ReentrantLock</tag>
+        <tag>源码</tag>
       </tags>
   </entry>
   <entry>
@@ -244,132 +641,65 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode423-从英文中重建数字</title>
-    <url>/2021/11/24/LeetCode423/</url>
-    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串 <code>s</code> ，其中包含字母顺序打乱的用英文单词表示的若干数字（<code>0-9</code>）。按 <strong>升序</strong> 返回原始的数字。</p>
- <span id="more"></span>
-
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;owoztneoer&quot;</span><br><span class="line">输出：&quot;012&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;fviefuro&quot;</span><br><span class="line">输出：&quot;45&quot;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>提示：</p>
-<ul>
-<li>1 &lt;= s.length &lt;= 105</li>
-<li>s[i] 为 [“e”,”g”,”f”,”i”,”h”,”o”,”n”,”s”,”r”,”u”,”t”,”w”,”v”,”x”,”z”] 这些字符之一</li>
-<li>s 保证是一个符合题目要求的字符串</li>
-</ul>
-<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目后，大概猜出可能需要每个数字的特定字母做标识，所以干脆列出0-9数字的英文单词观察</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ZERO = <span class="string">&quot;zero&quot;</span>;<span class="comment">//Z</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ONE = <span class="string">&quot;one&quot;</span>;<span class="comment">//Z,W,U-&gt;O</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String TWO = <span class="string">&quot;two&quot;</span>;<span class="comment">//W</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String THREE = <span class="string">&quot;three&quot;</span>;<span class="comment">//Z,U-&gt;R</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String FOUR = <span class="string">&quot;four&quot;</span>;<span class="comment">//U</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String FIVE = <span class="string">&quot;five&quot;</span>;<span class="comment">//U-&gt;F</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SIX = <span class="string">&quot;six&quot;</span>;<span class="comment">//X</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SEVEN = <span class="string">&quot;seven&quot;</span>;<span class="comment">//X-&gt;S</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String EIGHT = <span class="string">&quot;eight&quot;</span>;<span class="comment">//G</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String NINE = <span class="string">&quot;nine&quot;</span>;<span class="comment">//G,X,U-&gt;F-&gt;I</span></span><br></pre></td></tr></table></figure>
-
-<p>如上，观察后得出，可以分三轮，计算出每个数字的出现次数</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//第一轮，选出zero,two,four,six,eight</span></span><br><span class="line"><span class="comment">//第二轮，选出one,three,five,seven</span></span><br><span class="line"><span class="comment">//第三轮，选出nine</span></span><br></pre></td></tr></table></figure>
-
-<p>得出方法后，代码就很容易写了</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Optional;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">originalDigits</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//首先把s做分解，用Map&lt;Character, Integer&gt;做容器</span></span><br><span class="line">        Map&lt;Character, Integer&gt; wordCount = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = s.charAt(i);</span><br><span class="line">            <span class="keyword">if</span>( wordCount.containsKey(c) )&#123;</span><br><span class="line">                wordCount.put(c, wordCount.get(c)+<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                wordCount.put(c, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] numCount = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="comment">//第一轮</span></span><br><span class="line">        numCount[<span class="number">0</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;z&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">2</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;w&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">4</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;u&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">6</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;x&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        numCount[<span class="number">8</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;g&#x27;</span>)).orElse(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//第二轮</span></span><br><span class="line">        numCount[<span class="number">1</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;o&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">0</span>]-numCount[<span class="number">2</span>]-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">3</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;r&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">0</span>]-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">5</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;f&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">4</span>];</span><br><span class="line">        numCount[<span class="number">7</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;s&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">6</span>];</span><br><span class="line">        <span class="comment">//第三轮</span></span><br><span class="line">        numCount[<span class="number">9</span>] = Optional.ofNullable(wordCount.get(<span class="string">&#x27;i&#x27;</span>)).orElse(<span class="number">0</span>)-numCount[<span class="number">5</span>]-numCount[<span class="number">6</span>]-numCount[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numCount.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numCount[i]; j++) &#123;</span><br><span class="line">                sb.append(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1124/article2/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1124/article2/01.png"></p>
-<p>题目转载自：<a href="https://leetcode-cn.com/problems/reconstruct-original-digits-from-english">https://leetcode-cn.com/problems/reconstruct-original-digits-from-english</a></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode38-外观数列</title>
-    <url>/2021/12/01/LeetCode38-%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/</url>
-    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个正整数<code> n</code> ，输出外观数列的第 <code>n</code> 项。</p>
-<p>「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。</p>
-<p>你可以将其视作是由递归公式定义的数字字符串序列：</p>
-<ul>
-<li><p><code>countAndSay(1) = &quot;1&quot;</code></p>
-</li>
-<li><p><code>countAndSay(n)</code> 是对<code> countAndSay(n-1)</code> 的描述，然后转换成另一个数字字符串。</p>
-</li>
-</ul>
- <span id="more"></span>
-
-<p>前五项如下：</p>
-<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">1.     1</span><br><span class="line">2.     11</span><br><span class="line">3.     21</span><br><span class="line">4.     1211</span><br><span class="line">5.     111221</span><br><span class="line">第一项是数字 1 </span><br><span class="line">描述前一项，这个数是 1 即 “ 一 个 1 ”，记作 &quot;11&quot;</span><br><span class="line">描述前一项，这个数是 11 即 “ 二 个 1 ” ，记作 &quot;21&quot;</span><br><span class="line">描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 &quot;1211&quot;</span><br><span class="line">描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 &quot;111221&quot;</span><br></pre></td></tr></table></figure>
-
-<p>要 <strong>描述</strong>  一个数字字符串，首先要将字符串分割为 <strong>最小</strong> 数量的组，每个组都由连续的最多 <strong>相同字符</strong> 组成。然后对于每个组，先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。</p>
-<p>例如，数字字符串<code> &quot;3322251&quot;</code> 的描述如下图：</p>
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/00.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/00.png"></p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1</span><br><span class="line">输出：&quot;1&quot;</span><br><span class="line">解释：这是一个基本样例。</span><br></pre></td></tr></table></figure>
-
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 4</span><br><span class="line">输出：&quot;1211&quot;</span><br><span class="line">解释：</span><br><span class="line">countAndSay(1) = &quot;1&quot;</span><br><span class="line">countAndSay(2) = 读 &quot;1&quot; = 一 个 1 = &quot;11&quot;</span><br><span class="line">countAndSay(3) = 读 &quot;11&quot; = 二 个 1 = &quot;21&quot;</span><br><span class="line">countAndSay(4) = 读 &quot;21&quot; = 一 个 2 + 一 个 1 = &quot;12&quot; + &quot;11&quot; = &quot;1211&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= n &lt;= 30</code></li>
-</ul>
-<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目后，觉得用顺推的思路比较容易。我们可以依次算出第1个、第2个、第3个…第n-1个外观数列，则第n个外观数列也容易算出</p>
-<p>代码如下</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">countAndSay</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">&quot;1&quot;</span>;</span><br><span class="line">        <span class="keyword">int</span> loop = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> ( loop &lt; n )&#123;</span><br><span class="line">            loop++;</span><br><span class="line">            str = getNextStr(str);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getNextStr</span><span class="params">(String input)</span></span>&#123;</span><br><span class="line">        <span class="keyword">char</span> start = input.charAt(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; input.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>( input.charAt(i) != start )&#123;</span><br><span class="line">                sb.append(count);</span><br><span class="line">                sb.append(start);</span><br><span class="line">                start = input.charAt(i);</span><br><span class="line">                count = <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sb.append(count);</span><br><span class="line">        sb.append(start);</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/01.png"></p>
-<p>题目转载自：<a href="https://leetcode-cn.com/problems/count-and-say">https://leetcode-cn.com/problems/count-and-say</a></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode807-保持城市天际线</title>
-    <url>/2021/12/13/LeetCode807-%E4%BF%9D%E6%8C%81%E5%9F%8E%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF/</url>
-    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一座由 <code>n x n</code> 个街区组成的城市，每个街区都包含一座立方体建筑。给你一个下标从 <strong>0</strong> 开始的 <code>n x n</code> 整数矩阵 <code>grid</code> ，其中 <code>grid[r][c]</code> 表示坐落于 <code>r</code> 行 <code>c</code> 列的建筑物的 <strong>高度</strong> 。</p>
-<p>城市的 <strong>天际线</strong> 是从远处观察城市时，所有建筑物形成的外部轮廓。从东、南、西、北四个主要方向观测到的 <strong>天际线</strong> 可能不同。</p>
-<p>我们被允许为 <strong>任意数量的建筑物</strong> 的高度增加 <strong>任意增量（不同建筑物的增量可能不同）</strong> 。 高度为 <code>0</code> 的建筑物的高度也可以增加。然而，增加的建筑物高度 <strong>不能影响</strong> 从任何主要方向观察城市得到的 <strong>天际线</strong> 。</p>
-<p>在 <strong>不改变</strong> 从任何主要方向观测到的城市 <strong>天际线</strong> 的前提下，返回建筑物可以增加的 <strong>最大高度增量总和</strong> 。</p>
+    <title>如何带新人</title>
+    <url>/2022/02/17/%E5%A6%82%E4%BD%95%E5%B8%A6%E6%96%B0%E4%BA%BA/</url>
+    <content><![CDATA[<p>这是一篇写于2017年的博客，发表在QQ空间。觉得还是有参考意义，所以再次Copy到这个博客中</p>
+<hr>
+<p><strong>为什么我要带新人？</strong><br>其实我也没有搞懂这个问题。和面试一样，既不属于KPI考核，带的过程花自己不少时间精力，还有老生常谈的教出徒弟饿死师傅。完全就是一个吃力不讨好的工作。但，对于我本人来说，既然是上级安排的任务，我就不得不做。而要做，我就想把它做好。不能接受后，不愿意做，然后应付了事。被上级、其他同事、新人所鄙视，不符合我的价值观。另外，教出徒弟饿死师傅的事情，我觉得本质上还是因为师父做得不够。一代总比一代强，个人无法对抗这种趋势，并不存在师父不教徒弟，徒弟就永远不会超越师父的定律，要想不被淘汰，总归还是打铁需要自身硬</p>
+<p><strong>带新人的目的是什么？</strong><br>公司招人的目的是为了分担老员工的任务(原有任务或者即将要新增的任务)，至少在基层是这样。那带新人的目的就可以简单的说成：<code>让新人在短时间内能够胜任岗位要求，并且持久的为公司产生效益</code>。抽取出关键词，短时间内胜任、持久，我们暂且先谈这两点吧，怎么做到这些</p>
 <span id="more"></span>
 
-<p><strong>示例 1：</strong><br><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1213/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1213/article01/01.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：grid = [[3,0,8,4],[2,4,5,7],[9,2,6,3],[0,3,1,0]]</span><br><span class="line">输出：35</span><br><span class="line">解释：建筑物的高度如上图中心所示。</span><br><span class="line">用红色绘制从不同方向观看得到的天际线。</span><br><span class="line">在不影响天际线的情况下，增加建筑物的高度：</span><br><span class="line">gridNew = [ [8, 4, 8, 7],</span><br><span class="line">            [7, 4, 7, 7],</span><br><span class="line">            [9, 4, 8, 7],</span><br><span class="line">            [3, 3, 3, 3] ]</span><br></pre></td></tr></table></figure>
 
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：grid = [[0,0,0],[0,0,0],[0,0,0]]</span><br><span class="line">输出：0</span><br><span class="line">解释：增加任何建筑物的高度都会导致天际线的变化。</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>n == grid.length</code></li>
-<li><code>n == grid[r].length</code></li>
-<li><code>2 &lt;= n &lt;= 50</code></li>
-<li><code>0 &lt;= grid[r][c] &lt;= 100</code></li>
-</ul>
-<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>看完题目可知，只要建筑物增加的高度不高于其所在行&amp;所在列的最小值，则不会影响天际线。所以，解题也就从计算行列最小值-当前建筑物的高度，则为当前建筑物可增加的高度</p>
-<p>代码如下(代码有优化的空间，懒得处理了)：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxIncreaseKeepingSkyline</span><span class="params">(<span class="keyword">int</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] rowMax = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length];</span><br><span class="line">        <span class="keyword">int</span>[] colMax = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; grid.length; i++) &#123;</span><br><span class="line">            rowMax[i] = grid[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid[i].length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>( rowMax[i] &lt; grid[i][j] )&#123;</span><br><span class="line">                    rowMax[i] = grid[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//因为行列是相等的</span></span><br><span class="line">            colMax[i] = grid[<span class="number">0</span>][i];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>( colMax[i] &lt; grid[j][i] )&#123;</span><br><span class="line">                    colMax[i] = grid[j][i];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//        System.out.println(Arrays.toString(rowMax));</span></span><br><span class="line"><span class="comment">//        System.out.println(Arrays.toString(colMax));</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; grid.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; grid[i].length; j++) &#123;</span><br><span class="line">                sum += Math.min(rowMax[i], colMax[j]) - grid[i][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>题目转载自：<a href="https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline">https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline</a></p>
+<p><strong>带新人关键词-短时间内胜任</strong></p>
+<p>想象一下我们要参加一门入学考试，现在时间很紧，我们知道要考的几门课程，要想提高概率通过这门考试，我们应该怎么做呢？</p>
+<p>上学的时候我们很熟悉解上面这道题的方法。1.划重点 2.多看几遍重点知识 3.多做几遍模拟考试。</p>
+<p>把这个方法套到我们带新人的任务上，也就是1.整理新人必知技能 2.让新人了解掌握这些基础技能知识 3.安排任务作为测试。另外，上面那道题其实还隐藏着一个重要信息，deadline。deadline对于我们培养新人的提示就是对新人进行周期性检查。</p>
+<p>再具体到我所在的行业岗位，可以细化到如下任务：</p>
+<p>整理新人必知技能：包括技术基础、项目架构、公司用到中的工具、具体后续新人要涉及的一个模块，技术基础如git/javascript/react native，项目架构即整个项目的构成，主要包括网络访问模块/图片获取模块/公司自身研发的跳转模块等，公司用到的工具如bug系统/构建打包测试/gitlab/Code Review平台等，具体模块如产品交互/模块设计/接口等</p>
+<p>让新人了解掌握这些基础技能知识：方法可以有1.讲解，2.让新人自行阅读文档代码。一般这个阶段，新人会有很多问题，可以让新人把问题整理成wiki，后续新人可以用得着<code>[需要维护这个wiki，不然wiki就是垃圾]</code></p>
+<p>安排任务作为测试：循序渐进的安排任务。最佳的学习方式就是<code>理论与实践</code>同时进行！新人在学习一段时间后，往往都有一个疲惫期，期望能做点实事，以寻求所学知识的巩固与肯定。像我平时的话会安排一些bug，或者一些平时没时间做但可以进行优化的功能点。这个阶段需要跟进，看新人做得怎样，有遇到哪些困哪，是否可以克服，是否需要帮助</p>
+<p>周期性检查：以周或者双周为单位，总结新人在前一个阶段工作成绩、做得好、做得不足之处以及改进方法、下一阶段计划等。主要检查新人的工作状态，意愿和能力是否合适工作，如何改进。</p>
+<p><strong>带新人关键词-持久</strong><br>这个点其实会涉及企业愿景、员工职业规划、公司激励手段等这些大部头，但本文只是简单的从新人期这个点着手。所以这里简单说说。做技术的同事，一般都比较腼腆，很少有与新人交流很多，新人一般也比较少主动找不同的同事聊工作，这种情况就需要导师多与新人交流，肯定鼓励。后期可以减少频率，但前期还是需要导师帮助新人渡过这个熟悉期。邮件介绍、团队欢迎介绍、聚餐，让新人对人事环境有个大概了解，这是必不可少的</p>
+<p><strong>其他</strong><br>我很喜欢PDCA戴明环，这是一个螺旋上升的方法论，不拘泥于当前，不忘过去，回顾复盘发现解决问题，引出更好的带人方法</p>
+<p>以上分了两次写，第一次是5月7号，本来想系统的写一下带新人的方方面面，但现在也没精力了，删了几个点，就此吧，后续有机会再补上。这两个月公司发生很多事情，我自己要变动，带的一个实习生也离开了，诶，我面壁思过去了</p>
 ]]></content>
       <categories>
-        <category>算法</category>
+        <category>管理</category>
       </categories>
       <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>Java</tag>
+        <tag>带人</tag>
+        <tag>管理者</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何面试研发工程师(待完成)</title>
+    <url>/2022/02/25/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88/</url>
+    <content><![CDATA[<p>面试结束写面试评价</p>
+<ul>
+<li>Coding question 写代码问题：需要写实际的代码，语言不限；</li>
+<li>Design question 设计问题：系统设计、功能设计；</li>
+<li>Analytical question 分析问题：算法、数据结构、问题分析、逻辑分析、等等；</li>
+<li>Open ended question 无固定答案问题：主要看候选人的逻辑分析和问题解决能力；</li>
+</ul>
+<span id="more"></span>
+
+<p>Google的打分解释：<br>1分：坚决不要，而且愿意说服他人为什么不要<br>2分：不要，但可以被别人说服要<br>3分：要，但可以被别人说服成不要<br>4分：坚决要，吐血推荐。愿意说服他人为什么非要不可</p>
+<p>面试技术管理者</p>
+<ul>
+<li>工程能力和系统设计能力</li>
+<li>团队组织架构设计能力</li>
+<li>技术的宽度和深度</li>
+<li>如何激励团队成长</li>
+<li>研发团队绩效考核怎么做</li>
+</ul>
+<p>参考：<a href="https://medium.com/@philying/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-4078177d1cb8">https://medium.com/@philying/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-4078177d1cb8</a></p>
+]]></content>
+      <categories>
+        <category>管理</category>
+      </categories>
+      <tags>
+        <tag>管理者</tag>
+        <tag>面试官</tag>
       </tags>
   </entry>
   <entry>
@@ -423,83 +753,6 @@
       </categories>
       <tags>
         <tag>备孕</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何带新人</title>
-    <url>/2022/02/17/%E5%A6%82%E4%BD%95%E5%B8%A6%E6%96%B0%E4%BA%BA/</url>
-    <content><![CDATA[<p>这是一篇写于2017年的博客，发表在QQ空间。觉得还是有参考意义，所以再次Copy到这个博客中</p>
-<hr>
-<p><strong>为什么我要带新人？</strong><br>其实我也没有搞懂这个问题。和面试一样，既不属于KPI考核，带的过程花自己不少时间精力，还有老生常谈的教出徒弟饿死师傅。完全就是一个吃力不讨好的工作。但，对于我本人来说，既然是上级安排的任务，我就不得不做。而要做，我就想把它做好。不能接受后，不愿意做，然后应付了事。被上级、其他同事、新人所鄙视，不符合我的价值观。另外，教出徒弟饿死师傅的事情，我觉得本质上还是因为师父做得不够。一代总比一代强，个人无法对抗这种趋势，并不存在师父不教徒弟，徒弟就永远不会超越师父的定律，要想不被淘汰，总归还是打铁需要自身硬</p>
-<p><strong>带新人的目的是什么？</strong><br>公司招人的目的是为了分担老员工的任务(原有任务或者即将要新增的任务)，至少在基层是这样。那带新人的目的就可以简单的说成：<code>让新人在短时间内能够胜任岗位要求，并且持久的为公司产生效益</code>。抽取出关键词，短时间内胜任、持久，我们暂且先谈这两点吧，怎么做到这些</p>
-<span id="more"></span>
-
-
-<p><strong>带新人关键词-短时间内胜任</strong></p>
-<p>想象一下我们要参加一门入学考试，现在时间很紧，我们知道要考的几门课程，要想提高概率通过这门考试，我们应该怎么做呢？</p>
-<p>上学的时候我们很熟悉解上面这道题的方法。1.划重点 2.多看几遍重点知识 3.多做几遍模拟考试。</p>
-<p>把这个方法套到我们带新人的任务上，也就是1.整理新人必知技能 2.让新人了解掌握这些基础技能知识 3.安排任务作为测试。另外，上面那道题其实还隐藏着一个重要信息，deadline。deadline对于我们培养新人的提示就是对新人进行周期性检查。</p>
-<p>再具体到我所在的行业岗位，可以细化到如下任务：</p>
-<p>整理新人必知技能：包括技术基础、项目架构、公司用到中的工具、具体后续新人要涉及的一个模块，技术基础如git/javascript/react native，项目架构即整个项目的构成，主要包括网络访问模块/图片获取模块/公司自身研发的跳转模块等，公司用到的工具如bug系统/构建打包测试/gitlab/Code Review平台等，具体模块如产品交互/模块设计/接口等</p>
-<p>让新人了解掌握这些基础技能知识：方法可以有1.讲解，2.让新人自行阅读文档代码。一般这个阶段，新人会有很多问题，可以让新人把问题整理成wiki，后续新人可以用得着<code>[需要维护这个wiki，不然wiki就是垃圾]</code></p>
-<p>安排任务作为测试：循序渐进的安排任务。最佳的学习方式就是<code>理论与实践</code>同时进行！新人在学习一段时间后，往往都有一个疲惫期，期望能做点实事，以寻求所学知识的巩固与肯定。像我平时的话会安排一些bug，或者一些平时没时间做但可以进行优化的功能点。这个阶段需要跟进，看新人做得怎样，有遇到哪些困哪，是否可以克服，是否需要帮助</p>
-<p>周期性检查：以周或者双周为单位，总结新人在前一个阶段工作成绩、做得好、做得不足之处以及改进方法、下一阶段计划等。主要检查新人的工作状态，意愿和能力是否合适工作，如何改进。</p>
-<p><strong>带新人关键词-持久</strong><br>这个点其实会涉及企业愿景、员工职业规划、公司激励手段等这些大部头，但本文只是简单的从新人期这个点着手。所以这里简单说说。做技术的同事，一般都比较腼腆，很少有与新人交流很多，新人一般也比较少主动找不同的同事聊工作，这种情况就需要导师多与新人交流，肯定鼓励。后期可以减少频率，但前期还是需要导师帮助新人渡过这个熟悉期。邮件介绍、团队欢迎介绍、聚餐，让新人对人事环境有个大概了解，这是必不可少的</p>
-<p><strong>其他</strong><br>我很喜欢PDCA戴明环，这是一个螺旋上升的方法论，不拘泥于当前，不忘过去，回顾复盘发现解决问题，引出更好的带人方法</p>
-<p>以上分了两次写，第一次是5月7号，本来想系统的写一下带新人的方方面面，但现在也没精力了，删了几个点，就此吧，后续有机会再补上。这两个月公司发生很多事情，我自己要变动，带的一个实习生也离开了，诶，我面壁思过去了</p>
-]]></content>
-      <categories>
-        <category>管理</category>
-      </categories>
-      <tags>
-        <tag>带人</tag>
-        <tag>管理者</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode224-基本计算器</title>
-    <url>/2022/02/17/LeetCode224-%E5%9F%BA%E6%9C%AC%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
-    <content><![CDATA[<h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串表达式 <code>s</code> ，请你实现一个基本计算器来计算并返回它的值。</p>
-<p>注意:不允许使用任何将字符串作为数学表达式计算的内置函数，比如 <code>eval() </code>。</p>
- <span id="more"></span>
-
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;1 + 1&quot;</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot; 2-1 + 2 &quot;</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;(1+(4+5+2)-3)+(6+8)&quot;</span><br><span class="line">输出：23</span><br></pre></td></tr></table></figure>
-
-
-
-
-<p>提示：</p>
-<ul>
-<li>1 &lt;= s.length &lt;= 3 * 105</li>
-<li>s 由数字、’+’、’-‘、’(‘、’)’、和 ‘ ‘ 组成</li>
-<li>s 表示一个有效的表达式</li>
-<li>‘+’ 不能用作一元运算(例如， “+1” 和 “+(2 + 3)” 无效)</li>
-<li>‘-‘ 可以用作一元运算(即 “-1” 和 “-(2 + 3)” 是有效的)</li>
-<li>输入中不存在两个连续的操作符</li>
-<li>每个数字和运行的计算将适合于一个有符号的 32位 整数</li>
-</ul>
-<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><p>因为以前大学的时候曾经学习过使用两个栈做表达式运算，所以看完题目后，便顺着这个思路解题</p>
-<p>代码如下</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"><span class="comment">//代码可以优化</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">calculate</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        LinkedList&lt;Integer&gt; data = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        LinkedList&lt;Character&gt; operator = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        s = s.replace(<span class="string">&quot; &quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = s.charAt(i);</span><br><span class="line">            <span class="keyword">switch</span> (c)&#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;(&#x27;</span>:</span><br><span class="line">                    <span class="keyword">if</span>( (i+<span class="number">1</span>) &lt; s.length() &amp;&amp; s.charAt(i+<span class="number">1</span>) == <span class="string">&#x27;-&#x27;</span> )&#123;</span><br><span class="line">                        data.push(<span class="number">0</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    operator.push(c);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">                    operator.push(c);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;)&#x27;</span>:</span><br><span class="line">                    operator.pop();</span><br><span class="line">                    <span class="keyword">int</span> popNum = data.pop();</span><br><span class="line">                    calculateNum(popNum, data, operator);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">                    sb.append(c);</span><br><span class="line">                    <span class="keyword">int</span> j = <span class="number">1</span>;</span><br><span class="line">                    <span class="keyword">while</span> ( (i+j) &lt; s.length() &amp;&amp; Character.isDigit(s.charAt(i+j)) )&#123;</span><br><span class="line">                        sb.append(s.charAt(i+j));</span><br><span class="line">                        j++;</span><br><span class="line">                    &#125;</span><br><span class="line">                    i = i+j-<span class="number">1</span>;</span><br><span class="line">                    <span class="keyword">int</span> currentNum = Integer.parseInt(sb.toString());</span><br><span class="line">                    calculateNum(currentNum, data, operator);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> data.pop();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">calculateNum</span><span class="params">(<span class="keyword">int</span> currentNum, LinkedList&lt;Integer&gt; data, LinkedList&lt;Character&gt; operator)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( operator.size() == <span class="number">0</span> )&#123;</span><br><span class="line">            data.push(currentNum);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">boolean</span> hasUseCurrentNum = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (operator.size() &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="string">&#x27;+&#x27;</span> == operator.peek())&#123;</span><br><span class="line">                operator.pop();</span><br><span class="line">                <span class="keyword">int</span> temp = data.pop();</span><br><span class="line">                data.push(temp+currentNum);</span><br><span class="line">                hasUseCurrentNum = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">&#x27;-&#x27;</span> == operator.peek())&#123;</span><br><span class="line">                operator.pop();</span><br><span class="line">                <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">if</span>(data.size() &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                    temp = data.pop();</span><br><span class="line">                &#125;</span><br><span class="line">                data.push(temp-currentNum);</span><br><span class="line">                hasUseCurrentNum = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(!hasUseCurrentNum)&#123;</span><br><span class="line">                    data.push(currentNum);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Java里面的栈Stack底层是数组结构，在容量不够时，难免会涉及扩容，扩容则需要迁移数据，效率较低。这里使用LinkedList作为栈使用。下图第二行是使用Stack实现，执行用时56ms，第一行是使用LinkedList实现，执行用时17ms</p>
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/02/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2021/1201/article01/01.png"></p>
-<p>题目转载自：<a href="https://leetcode-cn.com/problems/basic-calculator">https://leetcode-cn.com/problems/basic-calculator</a></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -582,259 +835,6 @@
         <tag>Java</tag>
         <tag>Bug</tag>
         <tag>JVM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mac修改MySQL配置文件</title>
-    <url>/2022/05/28/Mac%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<p>因为最近在验证binlog相关功能，所以想修改log-bin参数以启用该功能，所以需要修改配置文件。以下是踩坑之后总结出的过程</p>
-<h5 id="配置文件的路径"><a href="#配置文件的路径" class="headerlink" title="配置文件的路径"></a>配置文件的路径</h5><p>查看<a href="https://dev.mysql.com/doc/refman/5.7/en/option-files.html">官方文档</a>后，知道下述方式均可修改启动配置文件，顺序是从上往下读，后面的会覆盖前面的</p>
-<table>
-<thead>
-<tr>
-<th align="left">File Name</th>
-<th align="left">Purpose</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>/etc/my.cnf</code></td>
-<td align="left">Global options</td>
-</tr>
-<tr>
-<td align="left"><code>/etc/mysql/my.cnf</code></td>
-<td align="left">Global options</td>
-</tr>
-<tr>
-<td align="left"><code>*</code>SYSCONFDIR<code>*/my.cnf</code></td>
-<td align="left">Global options</td>
-</tr>
-<tr>
-<td align="left"><code>$MYSQL_HOME/my.cnf</code></td>
-<td align="left">Server-specific options (server only)</td>
-</tr>
-<tr>
-<td align="left"><code>defaults-extra-file</code></td>
-<td align="left">The file specified with <a href="https://dev.mysql.com/doc/refman/5.7/en/option-file-options.html#option_general_defaults-extra-file"><code>--defaults-extra-file</code></a>, if any</td>
-</tr>
-<tr>
-<td align="left"><code>~/.my.cnf</code></td>
-<td align="left">User-specific options</td>
-</tr>
-<tr>
-<td align="left"><code>~/.mylogin.cnf</code></td>
-<td align="left">User-specific login path options (clients only)</td>
-</tr>
-</tbody></table>
-<span id="more"></span>
-
-
-<p>但通过命令<code>mysqld --verbose --helpd</code>的输出参数知道，我的电脑及MySQL版本实际支持下方描述的方式配置</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">Default options are read from the following files in the given order:</span><br><span class="line">/etc/my.cnf /etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf ~/.my.cnf </span><br></pre></td></tr></table></figure>
-
-<h5 id="生成配置文件并修改权限"><a href="#生成配置文件并修改权限" class="headerlink" title="生成配置文件并修改权限"></a>生成配置文件并修改权限</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc</span><br><span class="line">touch my.cnf</span><br><span class="line"><span class="comment">#把文件所有者修改为_mysql</span></span><br><span class="line">sudo chown _mysql my.cnf</span><br><span class="line"><span class="comment">#把文件权限修改为644。如果权限是777，MySQL会忽略这个配置文件(坑)</span></span><br><span class="line">sudo chmod 644 my.cnf</span><br></pre></td></tr></table></figure>
-
-<p>使用编辑器，修改配置文件(如果使用vim修改配置，需要在修改所有者之前修改配置，或者修改my.cnf权限为777之后修改配置，但这样改完配置后，还要改文件权限为644)。我是直接用sublime修改</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">log-bin</span>=/usr/local/mysql/mysql-bin/mysql-bin</span><br><span class="line"><span class="attr">binlog-format</span>=ROW</span><br><span class="line"><span class="attr">server-id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="创建文件夹及文件"><a href="#创建文件夹及文件" class="headerlink" title="创建文件夹及文件"></a>创建文件夹及文件</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql/</span><br><span class="line"><span class="comment">#创建文件夹并修改所有者</span></span><br><span class="line">mkdir mysql-bin</span><br><span class="line">chown _mysql mysql-bin</span><br><span class="line"><span class="comment">#创建文件并修改所有者</span></span><br><span class="line"><span class="built_in">cd</span> mysql-bin</span><br><span class="line">touch mysql-bin.index</span><br><span class="line">chown _mysql mysql-bin.index</span><br></pre></td></tr></table></figure>
-
-
-
-<p>在系统偏好设置-&gt;MySQL中启动</p>
-<h5 id="其他问题："><a href="#其他问题：" class="headerlink" title="其他问题："></a>其他问题：</h5><ol>
-<li>通过官方shell脚本启动或重启，一直提示错误，原因暂未找到</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">➜  ~ sudo /usr/<span class="built_in">local</span>/mysql/support-files/mysql.server restart</span><br><span class="line"> ERROR! MySQL server PID file could not be found!</span><br><span class="line">Starting MySQL</span><br><span class="line">..^C</span><br><span class="line">➜  ~ </span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>启动时的错误日志在/usr/local/mysql/data/mysqld.local.err，这个是最大的坑。因为日志使用时间是祖鲁时间，找了半天启动日志把这个日志忽略了。祖鲁时间比北京时间晚8个小时。</li>
-</ol>
-<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">2022-05-27T19:08:37.136167Z 294 [Note] Access denied for user &#x27;creasylai&#x27;@&#x27;localhost&#x27; (using password: NO)</span><br></pre></td></tr></table></figure>
-
-<p>如上时间，北京时间实际是，很容易让人忽略</p>
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article01/01.png"></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>Mac</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>从使用场景分析ReentrantLock源码(待完成)</title>
-    <url>/2022/04/20/ReentrantLock%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</url>
-    <content><![CDATA[<p>Lock接口</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>Condition接口</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Condition</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">awaitUninterruptibly</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">awaitNanos</span><span class="params">(<span class="keyword">long</span> nanosTimeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">await</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">awaitUntil</span><span class="params">(Date deadline)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">signal</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">signalAll</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">            selfInterrupt();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p> AbstractQueuedSynchronizer类</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node SHARED = <span class="keyword">new</span> Node();</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node EXCLUSIVE = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED =  <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIGNAL    = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONDITION = -<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PROPAGATE = -<span class="number">3</span>;</span><br><span class="line">        <span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus;</span><br><span class="line">        <span class="keyword">volatile</span> Node prev;</span><br><span class="line">        <span class="keyword">volatile</span> Node next;</span><br><span class="line">        <span class="keyword">volatile</span> Thread thread;</span><br><span class="line">        Node nextWaiter;</span><br><span class="line">        <span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">isShared</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> nextWaiter == SHARED;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">final</span> Node <span class="title">predecessor</span><span class="params">()</span> <span class="keyword">throws</span> NullPointerException </span>&#123;</span><br><span class="line">            Node p = prev;</span><br><span class="line">            <span class="keyword">if</span> (p == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">        Node() &#123;    <span class="comment">// Used to establish initial head or SHARED marker</span></span><br><span class="line">        &#125;</span><br><span class="line">        Node(Thread thread, Node mode) &#123;     <span class="comment">// Used by addWaiter</span></span><br><span class="line">            <span class="keyword">this</span>.nextWaiter = mode;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line">        Node(Thread thread, <span class="keyword">int</span> waitStatus) &#123; <span class="comment">// Used by Condition</span></span><br><span class="line">            <span class="keyword">this</span>.waitStatus = waitStatus;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>ReentrantLock</tag>
-        <tag>源码</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何面试研发工程师(待完成)</title>
-    <url>/2022/02/25/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88/</url>
-    <content><![CDATA[<p>面试结束写面试评价</p>
-<ul>
-<li>Coding question 写代码问题：需要写实际的代码，语言不限；</li>
-<li>Design question 设计问题：系统设计、功能设计；</li>
-<li>Analytical question 分析问题：算法、数据结构、问题分析、逻辑分析、等等；</li>
-<li>Open ended question 无固定答案问题：主要看候选人的逻辑分析和问题解决能力；</li>
-</ul>
-<span id="more"></span>
-
-<p>Google的打分解释：<br>1分：坚决不要，而且愿意说服他人为什么不要<br>2分：不要，但可以被别人说服要<br>3分：要，但可以被别人说服成不要<br>4分：坚决要，吐血推荐。愿意说服他人为什么非要不可</p>
-<p>面试技术管理者</p>
-<ul>
-<li>工程能力和系统设计能力</li>
-<li>团队组织架构设计能力</li>
-<li>技术的宽度和深度</li>
-<li>如何激励团队成长</li>
-<li>研发团队绩效考核怎么做</li>
-</ul>
-<p>参考：<a href="https://medium.com/@philying/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-4078177d1cb8">https://medium.com/@philying/%E5%A6%82%E4%BD%95%E9%9D%A2%E8%AF%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-4078177d1cb8</a></p>
-]]></content>
-      <categories>
-        <category>管理</category>
-      </categories>
-      <tags>
-        <tag>管理者</tag>
-        <tag>面试官</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL主从搭建(待完成)</title>
-    <url>/2022/05/29/MySQL%E4%B8%BB%E4%BB%8E%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<p>目前我所在公司，申请数据库时，基本都是MySQL主从交付。这篇文章，也主要讲下MySQL主从</p>
-<h4 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h4><p>MySQL高可用是基于binlog。对binlog的解释，可以参看下<a href="https://dev.mysql.com/doc/internals/en/binary-log-overview.html">官方文档</a></p>
-<blockquote>
-<p>The binary log is a set of log files that contain information about data modifications made to a MySQL server instance. The log is enabled by starting the server with the <code>--log-bin</code> option</p>
-</blockquote>
-<p>默认binlog是关闭的，可以通过下方语句查询得到Value为OFF</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;log_bin&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>要打开binlog，可以通过修改配置文件/etc/my.cnf(Unix like系统下的配置)，重启MySQL</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="comment">#binlog文件的存放目录</span></span><br><span class="line"><span class="attr">log-bin</span>=/usr/local/mysql/mysql-bin/mysql-bin</span><br><span class="line"><span class="comment">#binlog文件格式</span></span><br><span class="line"><span class="attr">binlog-format</span>=MIXED</span><br><span class="line"><span class="comment">#server id</span></span><br><span class="line"><span class="attr">server-id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h5 id="binlog-format三种格式"><a href="#binlog-format三种格式" class="headerlink" title="binlog-format三种格式"></a>binlog-format三种格式</h5><p>假设我们执行SQL</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="comment">/*comment*/</span> <span class="keyword">where</span> c <span class="operator">&gt;=</span> <span class="number">20</span> <span class="keyword">and</span> d <span class="operator">&lt;=</span> <span class="number">25</span> limit <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>STATEMENT格式</li>
-</ul>
-<p>binlog文件中记录的是原始的SQL语句，如上方SQL，binlog中记录的是</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="comment">/*comment*/</span> <span class="keyword">where</span> c <span class="operator">&gt;=</span> <span class="number">20</span> <span class="keyword">and</span> d <span class="operator">&lt;=</span> <span class="number">25</span> limit <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>这种格式可能导致主从数据不一致</p>
-<ul>
-<li>ROW格式**[推荐]**</li>
-</ul>
-<p>binlog文件中记录的是SQL语句影响的所有行，如上方SQL，binlog中可能记录的是</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*所有满足的行都记录下来*/</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="keyword">where</span> c <span class="operator">=</span> <span class="number">20</span> <span class="keyword">and</span> d <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="keyword">where</span> c <span class="operator">=</span> <span class="number">21</span> <span class="keyword">and</span> d <span class="operator">=</span> <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
-
-<p>如果<code>binlog_row_image</code>配置为FULL，表t还有其他字段，则binlog会把所有字段都记录下来。如上方SQL，binlog中可能记录的是</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="keyword">where</span> c <span class="operator">=</span> <span class="number">20</span> <span class="keyword">and</span> d <span class="operator">=</span> <span class="number">20</span> <span class="keyword">and</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t <span class="keyword">where</span> c <span class="operator">=</span> <span class="number">21</span> <span class="keyword">and</span> d <span class="operator">=</span> <span class="number">20</span> <span class="keyword">and</span> id <span class="operator">=</span> <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
-
-<p>这种格式缺点是可能导致记录的数据特别多，比如满足SQL条件的行有上千行，则binlog会全部记下所有行。优点是避开了statement格式的主从不一致的情况，另外，通过分析binlog，我们也很容易恢复被误修改的数据。生产上推荐这种方式</p>
-<ul>
-<li>MIXED格式</li>
-</ul>
-<p>这种格式是上两种方式的混合，由MySQL判断，如果不会造成主从不一致，则记录原始SQL语句(statement)，否则记录所有变更行(row)。</p>
-<p>生产上首推ROW格式，易于恢复误修改数据。如果资源不足，可以考虑MIXED格式</p>
-<h5 id="binlog文件分析"><a href="#binlog文件分析" class="headerlink" title="binlog文件分析"></a>binlog文件分析</h5><p>通过下方语句，可以查看binlog记录内容</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> binlog events <span class="keyword">in</span> <span class="string">&#x27;mysql-bin.000001&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>结果</p>
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/01.png"></p>
-<p>ROW格式下，<code>show binlog</code>只能看到有那些变更，无法看到具体语句</p>
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/02.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/02.png"></p>
-<p>通过mysqlbinlog工具，可以分析ROW格式下的binlog</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysqlbinlog  -vv /usr/local/mysql-5.7.31-macos10.14-x86_64/mysql-bin/mysql-bin.000002 --start-position=544;</span><br></pre></td></tr></table></figure>
-
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/03.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/05/article02/03.png"></p>
-<p>另外，通过mysqlbinlog还可以执行binlog中的SQL</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysqlbinlog /usr/local/mysql-5.7.31-macos10.14-x86_64/mysql-bin/mysql-bin.000001  --start-position=544 --stop-position=862 | mysql -u$user -p$password;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>主从</tag>
-        <tag>高可用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Maven插件</title>
-    <url>/2022/07/02/Maven%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<p>Maven是一款基于插件作业的构建工具，它自身内置了非常多我们平常开发所需要的插件。如清理资源插件<code>maven-clean-plugin</code>，编译插件<code>maven-compiler-plugin</code>，打包插件<code>maven-jar-plugin</code>等。在工作中，我们也可以开发自己的插件，帮助我们提高开发效率</p>
-<p>下方以开发一个统计目录下所有文件的内容行数的插件为例</p>
-<span id="more"></span>
-
-<h4 id="创建Maven插件项目"><a href="#创建Maven插件项目" class="headerlink" title="创建Maven插件项目"></a>创建Maven插件项目</h4><p>使用archetype<code>maven-archetype-mojo</code>创建一个Maven项目(对应的groupid为<code>org.apache.maven.archetypes</code>)</p>
-<p>项目名最好使用<code>name-maven-plugin</code>，这样后续可以直接使用name:goal来执行插件目标</p>
-<p>如下图，IDEA创建了一个<code>count-maven-plugin</code>项目</p>
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/07/article01/01.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/07/article01/01.png"></p>
-<h4 id="修改POM文件"><a href="#修改POM文件" class="headerlink" title="修改POM文件"></a>修改POM文件</h4><p>IDEA自动创建的项目中，<code>maven-plugin-api</code>版本是2.0，太低了。我的Maven版本是3.6.3，所以这里我也把<code>maven-plugin-api</code>版本改成3.6.3</p>
-<p>同时，我们加入<code>maven-plugin-annotations</code>依赖，这样开发时可以使用maven注解。同时，我们修改项目的JDK版本为1.8。最终的pom.xml文件如下</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.creasy.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>count-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>maven-plugin<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>count-maven-plugin Maven Mojo<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.apache.org<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-plugin-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.6.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- dependencies to annotations --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 没有3.6.3版本，我们使用3.6.2版本 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugin-tools<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-plugin-annotations<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.6.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span> <span class="comment">&lt;!-- annotations are not used at runtime because @Retention(value=CLASS), they are needed only to build the plugin --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="添加goal对应的类"><a href="#添加goal对应的类" class="headerlink" title="添加goal对应的类"></a>添加goal对应的类</h4><p>项目默认创建了一个MyMojo</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.creasy.maven.plugins;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.AbstractMojo;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.MojoExecutionException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileWriter;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Goal which touches a timestamp file.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@goal</span> touch</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@phase</span> process-sources</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMojo</span></span></span><br><span class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">AbstractMojo</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Location of the file.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@parameter</span> expression=&quot;$&#123;project.build.directory&#125;&quot;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@required</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> File outputDirectory;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> MojoExecutionException</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        File f = outputDirectory;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( !f.exists() )</span><br><span class="line">        &#123;</span><br><span class="line">            f.mkdirs();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        File touch = <span class="keyword">new</span> File( f, <span class="string">&quot;touch.txt&quot;</span> );</span><br><span class="line"></span><br><span class="line">        FileWriter w = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            w = <span class="keyword">new</span> FileWriter( touch );</span><br><span class="line"></span><br><span class="line">            w.write( <span class="string">&quot;touch.txt&quot;</span> );</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> ( IOException e )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MojoExecutionException( <span class="string">&quot;Error creating file &quot;</span> + touch, e );</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">finally</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> ( w != <span class="keyword">null</span> )</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">try</span></span><br><span class="line">                &#123;</span><br><span class="line">                    w.close();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">catch</span> ( IOException e )</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">// ignore</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个类很简单，就是在outputDirectory(对应目录为<code>$&#123;project.build.directory&#125;</code>，也就是常见的maven项目的target目录)目录下创建一个touch.txt文件，文件内容为touch.txt</p>
-<p>我们参考MyMojo创建一个CountMojo类</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.creasy.maven.plugins;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.maven.model.Resource;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.AbstractMojo;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugin.MojoExecutionException;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugins.annotations.LifecyclePhase;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugins.annotations.Mojo;</span><br><span class="line"><span class="keyword">import</span> org.apache.maven.plugins.annotations.Parameter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Objects;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mojo(name = &quot;count&quot;,//对应插件的goal</span></span><br><span class="line"><span class="meta">        defaultPhase = LifecyclePhase.COMPILE,//绑定Maven的生命周期的默认值</span></span><br><span class="line"><span class="meta">        requiresProject = true,</span></span><br><span class="line"><span class="meta">        threadSafe = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountMojo</span> <span class="keyword">extends</span> <span class="title">AbstractMojo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Parameter(defaultValue = &quot;$&#123;project.build.sourceDirectory&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> File sourceDirectory;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Parameter(defaultValue = &quot;$&#123;project.build.testSourceDirectory&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> File testSourceDirectory;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Parameter(defaultValue = &quot;$&#123;project.resources&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Resource&gt; resources;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Parameter(defaultValue = &quot;$&#123;project.testResources&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Resource&gt; testResources;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> <span class="keyword">throws</span> MojoExecutionException </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            countLine(sourceDirectory);</span><br><span class="line">            countLine(testSourceDirectory);</span><br><span class="line">            <span class="keyword">for</span> (Resource resource : resources) &#123;</span><br><span class="line">                countLine(<span class="keyword">new</span> File(resource.getDirectory()));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (Resource testResource : testResources) &#123;</span><br><span class="line">                countLine(<span class="keyword">new</span> File(testResource.getDirectory()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MojoExecutionException(<span class="string">&quot;Unable to count line!&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">countLine</span><span class="params">(File dir)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( dir.exists() )&#123;</span><br><span class="line">            List&lt;File&gt; files = getFileByDir(dir);</span><br><span class="line">            <span class="keyword">long</span> line = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (File file : files) &#123;</span><br><span class="line">                line += countFile(file);</span><br><span class="line">            &#125;</span><br><span class="line">            getLog().info(String.format(<span class="string">&quot;Directory:%s, lines:%s&quot;</span>, dir.getPath(), line));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;File&gt; <span class="title">getFileByDir</span><span class="params">(File dir)</span> </span>&#123;</span><br><span class="line">        List&lt;File&gt; retList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (File file : Objects.requireNonNull(dir.listFiles())) &#123;</span><br><span class="line">            <span class="keyword">if</span> (file.isDirectory()) &#123;</span><br><span class="line">                retList.addAll(getFileByDir(file));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                retList.add(file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> retList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">long</span> <span class="title">countFile</span><span class="params">(File f)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> retValue = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> (BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(f))) &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">null</span> != bufferedReader.readLine()) &#123;</span><br><span class="line">                retValue++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> retValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个类还是比较简单的，有几点内容说明下</p>
-<ul>
-<li><code>@Parameter(defaultValue = &quot;$&#123;project.build.sourceDirectory&#125;&quot;)</code></li>
-</ul>
-<p>类中的变量可以通过@Parameter注解，定义使用插件时可以传参，如果不传则默认使用项目的<code>$&#123;project.build.sourceDirectory&#125;</code>属性。project.build.sourceDirectory这个属性其实是在super POM中定义的，具体可以使用的变量参考<a href="https://maven.apache.org/ref/3.8.6/maven-core/apidocs/org/apache/maven/plugin/PluginParameterExpressionEvaluator.html">这里</a></p>
-<ul>
-<li>类必须继承AbstractMojo，实现execute接口</li>
-<li>需要使用@Mojo注解的name属性定义goal</li>
-</ul>
-<p>以上，执行<code>mvn clean install</code>，即可把项目安装到本地仓库</p>
-<h4 id="使用插件"><a href="#使用插件" class="headerlink" title="使用插件"></a>使用插件</h4><p>其他项目要使用插件，只需要在pom文件中添加</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.creasy.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>count-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goal</span>&gt;</span>count<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>因为count默认绑定了compile生命周期，所以这里至配置了插件的goal</p>
-<p>执行<code>mvn clean compile</code>，如下，插件输出了每个资源目录下所有文件的内容行数</p>
-<p><img src="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/07/article01/02.png" alt="http://blog-image-creasylai.oss-cn-shenzhen.aliyuncs.com/blog.images/img/2022/07/article01/02.png"></p>
-<p>参考文档：</p>
-<p><a href="https://maven.apache.org/guides/plugin/guide-java-plugin-development.html">https://maven.apache.org/guides/plugin/guide-java-plugin-development.html</a></p>
-<p><a href="https://maven.apache.org/pom.html">https://maven.apache.org/pom.html</a></p>
-]]></content>
-      <categories>
-        <category>Maven</category>
-      </categories>
-      <tags>
-        <tag>插件</tag>
-        <tag>构建</tag>
       </tags>
   </entry>
 </search>
