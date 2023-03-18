@@ -837,4 +837,85 @@
         <tag>JVM</tag>
       </tags>
   </entry>
+  <entry>
+    <title>MySQL索引优化实战-索引错选</title>
+    <url>/2023/03/18/MySQL%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98-%E7%B4%A2%E5%BC%95%E9%94%99%E9%80%89/</url>
+    <content><![CDATA[<p>上周末在跟朋友描述以前做过的一个SQL优化案例时，提到原因是SQL错选索引，而当时我提出的优化方案之一是删除索引，朋友很惊讶，说他还没遇到过通过删除索引优化SQL的案例</p>
+<p>这周抽空回看了下之前邮件发出的方案，觉得还是值得说一下</p>
+<p>SQL错选索引，常见的原因是统计数据不准导致，通过对表执行<code>analyze table table_name</code>，重新做下统计即可，但这次遇到的索引错选，却不是因为统计数据问题</p>
+<span id="more"></span>
+
+<p>直接来看</p>
+<p>Oracle数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">数据量：</span><br><span class="line">a表：1500万</span><br><span class="line">b表：9000万</span><br><span class="line">c表：25000万</span><br><span class="line"></span><br><span class="line">a.name 无索引</span><br><span class="line">a.appl_seq 普通索引</span><br><span class="line">b.name 普通索引</span><br><span class="line">b.vir_cont_no 普通索引</span><br><span class="line">c.vir_cont_no 唯一索引</span><br><span class="line">c.appl_seq 普通索引</span><br></pre></td></tr></table></figure>
+
+<p>SQL是</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    a.cola, b.colb, c.colc</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    a,b,c</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    a.name <span class="operator">=</span> b.name</span><br><span class="line">        <span class="keyword">AND</span> b.vir_cont_no <span class="operator">=</span> c.vir_cont_no</span><br><span class="line">        <span class="keyword">AND</span> a.appl_seq <span class="operator">=</span> c.appl_seq</span><br><span class="line">        <span class="keyword">AND</span> c.appl_seq <span class="operator">=</span> <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+
+
+<p>上方这个SQL，偶现执行很慢，如偶尔执行超7秒</p>
+<p>看Oracle的执行计划为:</p>
+<p>1.通过a.appl_seq这个索引取出a表中需要的数据</p>
+<p>2.上方取出的数据通过b.name这索引，关联取出b表中的数据</p>
+<p>3.上方取出的数据通过c.vir_cont_no这个唯一索引，关联取出c表中的数据，并过滤条件c.appl_seq=123</p>
+<p>4.最终得出的数据返回给客户端</p>
+<p>原因也显而易见：</p>
+<ul>
+<li>步骤一</li>
+</ul>
+<p>Oracle会先将SQL改写成如下</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    a.cola, b.colb, c.colc</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    a,b,c</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    a.name <span class="operator">=</span> b.name</span><br><span class="line">        <span class="keyword">AND</span> b.vir_cont_no <span class="operator">=</span> c.vir_cont_no</span><br><span class="line">        <span class="keyword">AND</span> a.appl_seq <span class="operator">=</span> <span class="number">123</span></span><br><span class="line">        <span class="keyword">AND</span> c.appl_seq <span class="operator">=</span> <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>步骤二</li>
+</ul>
+<p>这时Oracle要做的就是判断用a表做驱动表，还是c表做驱动表。</p>
+<p>在a.appl_seq和c.appl_seq都是普通索引的情况下，a表的数据量少很多，所以选择通过a.appl_seq这个索引取出数据，即用a表做驱动表</p>
+<ul>
+<li>步骤三</li>
+</ul>
+<p>a表数据取出来后，SQL可以想象成如下</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    b.colb, c.colc</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    b,c</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    常量 <span class="operator">=</span> b.name</span><br><span class="line">        <span class="keyword">AND</span> b.vir_cont_no <span class="operator">=</span> c.vir_cont_no</span><br><span class="line">        <span class="keyword">AND</span> c.appl_seq <span class="operator">=</span> <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+
+<p>b.name和c.appl_seq都是普通索引，而b表的数据量少很多，所以这时还是选择通过b.name这个索引取出关联的数据</p>
+<ul>
+<li>步骤四</li>
+</ul>
+<p>取出b表数据后，SQL可以想象成如下</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    c.colc</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    c</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">        常量 <span class="operator">=</span> c.vir_cont_no</span><br><span class="line">        <span class="keyword">AND</span> c.appl_seq <span class="operator">=</span> <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这时候，c.vir_cont_no是唯一索引，c.appl_seq是普通索引，所以通过c.vir_cont_no这个索引，关联取出c表的数据</p>
+<p>上方，Oracle的执行计划其实没啥问题。问题在于name这个索引，分布不均匀，在个别名字下，冲突数据很多。</p>
+<p>分析了实际执行的SQL，发现SQL执行时，name为<code>王某</code>，a表中取出只有1条数据，但关联上b表时，合计数据有4万多条，这4万多的数据再关联c表，导致执行很慢。</p>
+<p>优化的方案：</p>
+<p>分析实际执行的SQL，发现如果b表通过b.vir_cont_no这个字段去取数据，仅有15条数据</p>
+<p>整个过程，可以先通过c.appl_seq取出c表的数据，合计有45条</p>
+<p>这45条数据通过b.vir_cont_no = c.vir_cont_no这个条件去取b表数据，有15条数据</p>
+<p>这15条数据再通过a.appl_seq = 123去取a表数据，再过滤条件a.name = b.name，总计也是只有15条</p>
+<p>那优化的方向就是让b表选择b.vir_cont_no这个索引</p>
+<p>固得出方案一：指定索引</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="comment">/* index(b idx_b_vir_cont_no) */</span></span><br><span class="line">    a.cola, b.colb, c.colc</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    a,b,c</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    a.name <span class="operator">=</span> b.name</span><br><span class="line">        <span class="keyword">AND</span> b.vir_cont_no <span class="operator">=</span> c.vir_cont_no</span><br><span class="line">        <span class="keyword">AND</span> a.appl_seq <span class="operator">=</span> c.appl_seq</span><br><span class="line">        <span class="keyword">AND</span> c.appl_seq <span class="operator">=</span> <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+<p>执行计划按我们的设想，先通过c.appl_seq索引取c表数据，再通过b.vir_cont_no索引取b表数据，再通过a.appl_seq索引取a表数据。实际执行测试了下，原SQL用了7s，指定用b.vir_cont_no索引后0.1s</p>
+<p>但指定索引需要修改代码(SQL)并发布版本，需要排版本</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">其实可以通过SQL rewrite功能实现不发版改写SQL，不过实际生产中我没用过</span><br><span class="line">可以参考MySQL官网：https://dev.mysql.com/doc/refman/8.0/en/rewriter-query-rewrite-plugin.html</span><br><span class="line">MySQL实战45讲也有介绍：https://time.geekbang.org/column/article/75746</span><br><span class="line">Oracle官网：https://docs.oracle.com/cd/E18283_01/server.112/e16579/qrbasic.htm</span><br></pre></td></tr></table></figure>
+
+<p>所以需要另外的方案</p>
+<p>通过全项目搜索b表的使用，发现b表在做查询时，全部都是b.name和b.vir_cont_no都会带上，即</p>
+<p>所有对b表的查询SQL都类似</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> b.col <span class="keyword">from</span> b <span class="keyword">where</span> b.name <span class="operator">=</span> <span class="string">&#x27;常量&#x27;</span> <span class="keyword">and</span> b.vir_cont_no <span class="operator">=</span> <span class="string">&#x27;常量&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>至于项目中为啥会建b.name和b.vir_cont_no这两个索引，已无从考究(项目是16年时开发的项目)</p>
+<p>所以，引出方案二，通过删除b.name这个索引实现上方SQL优化，不过删除索引毕竟风险比较大，而一般情况下，查询第一次比较慢，第二次执行时就会快很多(一个是因为查询缓存，另外一个是大量的中间数据已从磁盘加载至内存)</p>
+<p>业务同事在第一次失败后重试一次就行，所以最终还是按方案一排版本优化</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">其实可以隐藏索引，让索引对优化器不可见，降低直接删除索引的风险。一旦发现有异常，回滚也比较快</span><br><span class="line">可以参考MySQL官网：https://dev.mysql.com/doc/refman/8.0/en/invisible-indexes.html</span><br><span class="line">MySQL实战45讲也有介绍，不过我忘记在那一讲了😭</span><br></pre></td></tr></table></figure>
+
+<p>题外话：其实可以删除b.name，b.vir_cont_no这两个索引，建一个联合索引，idx_b_vir_cont_no_name(b.vir_cont_no,b.name)，这是最优的(b.vir_cont_no比b.name分布更均匀)</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>索引</tag>
+      </tags>
+  </entry>
 </search>
